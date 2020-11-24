@@ -1,14 +1,17 @@
-﻿@{
+﻿@model SocialJohnny.Models.Comment
+
+@{
     ViewBag.Title = "Edit";
 }
 
 <h2>Editare Comment</h2>
 
-<form method="post" action="/Comments/Edit/@ViewBag.comment.CommentId">
+<form method="post" action="/Comments/Edit/@Model.CommentId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
 
-    <label>Text Postare</label>
-    <input type="text" name="Text" value="@ViewBag.comment.Text" />
+    <label>Text coment</label>
+    @Html.Label("Text", "Text comentariu")
+    @Html.Editor("Text")
 
     <button type=" submit">Modifica comentariu</button>
 

@@ -21,7 +21,7 @@
 {
     <h2>@comment.Text</h2>
     <h3>@comment.Date</h3>
-    <form action="/Comments/Edit/@comment.PostId">
+    <form action="/Comments/Edit/@comment.CommentId">
         <button type="submit">Edit Comment</button>
     </form>
     <form method="post" action="/Comments/Delete/@comment.CommentId">
