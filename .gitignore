@@ -4,6 +4,16 @@ App_Data/
 Content/
 Migrations/
 Web.config
+Web.Debug.config
+fonts
+Properties
+Scripts
+favicon.ico
+Global.asax
+Global.asax.cs
+packages.config
+SocialJohnny.csproj
+Web.Release.config
 
 # User-specific files
 *.suo
