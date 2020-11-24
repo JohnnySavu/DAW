@@ -77,7 +77,7 @@ namespace SocialJohnny.Controllers
                 Group group= db.Groups.Find(id);
                 db.Groups.Remove(group);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("DeletePosts/" + id.ToString(), "Posts");
             }
             catch (Exception e)
             {

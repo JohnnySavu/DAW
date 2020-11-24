@@ -70,6 +70,35 @@ namespace SocialJohnny.Controllers
             }
         }
 
+        public ActionResult DeletePosts(int id)
+        {
+            try
+            {
+                var posts = from post in db.Posts
+                            where post.GroupId == id
+                            select post;
+                foreach (Post post in posts)
+                {
+                    var comments = from comment in db.Comments
+                                   where comment.PostId == id
+                                   select comment;
+                    foreach (Comment com in comments)
+                    {
+                        db.Comments.Remove(com);
+                        //db.SaveChanges();
+                    }
+                    db.Posts.Remove(post);
+                }
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch(Exception e)
+            {
+                return View("FailedPost");
+            }
+        }
+
+
         [HttpDelete]
         public ActionResult Delete(int id)
         {
