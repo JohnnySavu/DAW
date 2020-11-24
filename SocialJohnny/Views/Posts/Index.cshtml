@@ -3,7 +3,11 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Postari</h2>
+
+<h3>@ViewBag.deleteMessage</h3>
+<h3>@ViewBag.addMessage</h3>
+<h3>@ViewBag.editMessage</h3>
 
 
 <form method="post" action="/Posts/New">
@@ -29,7 +33,7 @@
     <form action="/Posts/Edit/@post.PostId">
         <button type="submit">Edit Post</button>
     </form>
-    <form method = "post" action="/Posts/Delete/@post.PostId">
+    <form method="post" action="/Posts/Delete/@post.PostId">
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button type="submit">Delete Post</button>
     </form>

@@ -14,6 +14,16 @@ namespace SocialJohnny.Controllers
         // GET: Posts
         public ActionResult Index()
         {
+            if (TempData.ContainsKey("DeletePost"))
+                ViewBag.deleteMessage = TempData["DeletePost"].ToString();
+
+            if (TempData.ContainsKey("AddPost"))
+                ViewBag.addMessage = TempData["AddPost"].ToString();
+
+            if (TempData.ContainsKey("EditPost"))
+                ViewBag.editMessage = TempData["EditPost"].ToString();
+
+
             var posts = from post in db.Posts
                         select post;
             ViewBag.Posts = posts;
@@ -31,6 +41,7 @@ namespace SocialJohnny.Controllers
             {
                 db.Posts.Add(post);
                 db.SaveChanges();
+                TempData["AddPost"] = "Postarea a fost creata cu succes";
                 return RedirectToAction("Index");
             }
             catch (Exception e)
@@ -44,8 +55,8 @@ namespace SocialJohnny.Controllers
             Post post = db.Posts.Find(id);
             if (post == null)
                 return RedirectToAction("Index");
-            ViewBag.post = post;
-            return View();
+            //ViewBag.post = post;
+            return View(post);
         }
 
         [HttpPut]
@@ -61,6 +72,7 @@ namespace SocialJohnny.Controllers
                     post.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
                     db.SaveChanges();
                 }
+                TempData["EditPost"] = "Postarea " + post.Title + " modificata cu succes!";
                 return RedirectToAction("Index");
        
             }
@@ -115,6 +127,7 @@ namespace SocialJohnny.Controllers
                 Post post = db.Posts.Find(id);
                 db.Posts.Remove(post);
                 db.SaveChanges();
+                TempData["DeletePost"] = "Postarea " + post.Title + " a fost stearsa cu succes";
                 return RedirectToAction("Index");
             }
             catch (Exception e)

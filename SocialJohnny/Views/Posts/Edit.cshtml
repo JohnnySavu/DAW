@@ -1,4 +1,4 @@
-﻿
+﻿@model SocialJohnny.Models.Post
 
 @{
     ViewBag.Title = "Edit";
@@ -6,15 +6,17 @@
 
 <h2>Editare Postare</h2>
 
-<form method="post" action="/Posts/Edit/@ViewBag.post.PostId">
+<form method="post" action="/Posts/Edit/@Model.PostId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
+    @Html.Label("Text", "Text postare")
+    <br />
+    @Html.TextBox("Text", null, new { @class = "form-control"})
 
-    <label>Text Postare</label>
-    <input type="text" name="Text" value="@ViewBag.post.Text"/>
 
-    <label>Titlu Postare</label>
-    <input type="text" name="Title" value="@ViewBag.post.Title" />
-
+    @Html.Label("Title", "Titlu postare")
+    @Html.TextBox("Title", null, new { @class = "form-control"})
+  
+    
     <button type=" submit">Modifica articol</button>
 
 
