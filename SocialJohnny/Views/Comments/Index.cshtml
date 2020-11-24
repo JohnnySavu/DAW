@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<form method="post" action="/Comments/New">
+
+    <label>Text Comentariu</label>
+    <input type="text" name="Text" />
+
+    <input type="hidden" name="PostId" value="@ViewBag.PostId" />
+    <button type="submit">Adauga</button>
+
+</form>
+
+
+@foreach (var comment in ViewBag.comments)
+{
+    <h2>@comment.Text</h2>
+    <h3>@comment.Date</h3>
+    <form action="/Comments/Edit/@comment.PostId">
+        <button type="submit">Edit Comment</button>
+    </form>
+    <form method="post" action="/Comments/Delete/@comment.CommentId">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button type="submit">Delete Comment</button>
+    </form>
+
+    <br />
+}

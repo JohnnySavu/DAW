@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Editare Comment</h2>
+
+<form method="post" action="/Comments/Edit/@ViewBag.comment.CommentId">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+
+    <label>Text Postare</label>
+    <input type="text" name="Text" value="@ViewBag.comment.Text" />
+
+    <button type=" submit">Modifica comentariu</button>
+
+
+</form>

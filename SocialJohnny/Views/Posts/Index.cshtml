@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<form method="post" action="/Posts/New">
+
+    <label>Text Postare</label>
+    <input type="text" name="Text" />
+
+    <label>Titlu Postare</label>
+    <input type="text" name="Title" />
+    <button type=" submit">Adauga</button>
+
+</form>
+
+
+@foreach (var post in ViewBag.Posts)
+{
+    <h1>@post.Title</h1>
+    <h2>@post.Text</h2>
+    <h3>@post.Date</h3>
+    <form action="/Posts/Edit/@post.PostId">
+        <button type="submit">Edit Post</button>
+    </form>
+    <form method = "post" action="/Posts/Delete/@post.PostId">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button type="submit">Delete Post</button>
+    </form>
+    <form action="/Comments/Index/@post.PostId">
+        <button type="submit">Show Comments</button>
+    </form>
+
+
+
+
+    <br />
+}

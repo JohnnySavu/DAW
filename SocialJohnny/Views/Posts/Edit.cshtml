@@ -1,0 +1,21 @@
+﻿
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Editare Postare</h2>
+
+<form method="post" action="/Posts/Edit/@ViewBag.post.PostId">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+
+    <label>Text Postare</label>
+    <input type="text" name="Text" value="@ViewBag.post.Text"/>
+
+    <label>Titlu Postare</label>
+    <input type="text" name="Title" value="@ViewBag.post.Title" />
+
+    <button type=" submit">Modifica articol</button>
+
+
+</form>
