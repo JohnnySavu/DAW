@@ -26,6 +26,7 @@ namespace SocialJohnny.Controllers
         public ActionResult New(Post post)
         {
             post.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
+
             try
             {
                 db.Posts.Add(post);

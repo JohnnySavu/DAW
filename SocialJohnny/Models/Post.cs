@@ -17,6 +17,9 @@ namespace SocialJohnny.Models
         public string Text { get; set; }
         public String Date { get; set; }
 
+        //Fk
+        public int GroupId { get; set; }
+
         public virtual ICollection<Comment> Comment { get; set; }
     
     }

@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Groups</h2>
+
+
+<form method="post" action="/Groups/New">
+
+    <label>Nume grup</label>
+    <input type="text" name="Name" />
+
+    <label>Privat</label>
+    <select name="IsPrivate">
+        <option value="true">Privat</option>
+        <option value="false">Public</option>
+    </select>
+
+    <button type=" submit">Adauga</button>
+
+</form>
+
+
+@foreach (var group in ViewBag.groups)
+{
+    <h1>@group.Name</h1>
+    <form action="/Groups/Edit/@group.GroupId">
+        <button type="submit">Edit Group</button>
+    </form>
+    <form method="post" action="/Groups/Delete/@group.GroupId">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button type="submit">Delete Group</button>
+    </form>
+    <br />
+}
