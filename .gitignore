@@ -3,7 +3,7 @@
 App_Data/
 Content/
 Migrations/
-
+Web.config
 
 # User-specific files
 *.suo
