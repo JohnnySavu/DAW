@@ -44,8 +44,8 @@ namespace SocialJohnny.Controllers
             Comment comment = db.Comments.Find(id);
             if (comment == null)
                 return RedirectToAction("FailedComment");
-            ViewBag.comment = comment;
-            return View();
+
+            return View(comment);
         }
 
         [HttpPut]

@@ -14,6 +14,8 @@ namespace SocialJohnny.Controllers
         // GET: Posts
         public ActionResult Index()
         {
+            Post viewPost = new Post();
+            viewPost.Title = null;
             if (TempData.ContainsKey("DeletePost"))
                 ViewBag.deleteMessage = TempData["DeletePost"].ToString();
 
@@ -31,7 +33,27 @@ namespace SocialJohnny.Controllers
             return View();
         }
 
- 
+        public ActionResult IndexReload(Post reloadPost)
+        {
+            if (TempData.ContainsKey("DeletePost"))
+                ViewBag.deleteMessage = TempData["DeletePost"].ToString();
+
+            if (TempData.ContainsKey("AddPost"))
+                ViewBag.addMessage = TempData["AddPost"].ToString();
+
+            if (TempData.ContainsKey("EditPost"))
+                ViewBag.editMessage = TempData["EditPost"].ToString();
+
+
+            var posts = from post in db.Posts
+                        select post;
+            ViewBag.Posts = posts;
+
+            return View("Index", reloadPost);
+        }
+
+
+
         [HttpPost]
         public ActionResult New(Post post)
         {
@@ -39,10 +61,17 @@ namespace SocialJohnny.Controllers
 
             try
             {
-                db.Posts.Add(post);
-                db.SaveChanges();
-                TempData["AddPost"] = "Postarea a fost creata cu succes";
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Posts.Add(post);
+                    db.SaveChanges();
+                    TempData["AddPost"] = "Postarea a fost creata cu succes";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("IndexReload", post);
+                }
             }
             catch (Exception e)
             {

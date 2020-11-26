@@ -1,4 +1,5 @@
-﻿
+﻿@model SocialJohnny.Models.Post
+
 @{
     ViewBag.Title = "Index";
 }
@@ -12,11 +13,16 @@
 
 <form method="post" action="/Posts/New">
 
-    <label>Text Postare</label>
-    <input type="text" name="Text" />
 
-    <label>Titlu Postare</label>
-    <input type="text" name="Title" />
+    @Html.Label("Text", "Textul postarii")
+    @Html.Editor("Text")
+    @Html.ValidationMessageFor(m => m.Text, "Mesajul este obligatoriu", new { @class = "text-danger " })
+
+
+    @Html.Label("Title", "Titlul postarii")
+    @Html.EditorFor(m => m.Title)
+
+    @Html.ValidationMessageFor(m => m.Title, "Titlul este obligatoriu", new { @class = "text-danger " })
 
     <input type="hidden" name="GroupId" value="1" />
 
