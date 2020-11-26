@@ -1,15 +1,23 @@
-﻿
+﻿@model SocialJohnny.Models.Comment
+
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
 
+<h3>@ViewBag.deleteMessage</h3>
+<h3>@ViewBag.addMessage</h3>
+<h3>@ViewBag.editMessage</h3>
 
 <form method="post" action="/Comments/New">
 
-    <label>Text Comentariu</label>
-    <input type="text" name="Text" />
+
+    @Html.Label("Text", "Text Comentariu")
+    @Html.Editor("Text")
+    @Html.ValidationMessageFor(m => m.Text, "Numele este obligatoriu", new { @class = "text-danger " })
+
+    <br />
 
     <input type="hidden" name="PostId" value="@ViewBag.PostId" />
     <button type="submit">Adauga</button>

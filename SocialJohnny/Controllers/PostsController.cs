@@ -14,8 +14,7 @@ namespace SocialJohnny.Controllers
         // GET: Posts
         public ActionResult Index()
         {
-            Post viewPost = new Post();
-            viewPost.Title = null;
+
             if (TempData.ContainsKey("DeletePost"))
                 ViewBag.deleteMessage = TempData["DeletePost"].ToString();
 

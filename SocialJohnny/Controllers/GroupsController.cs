@@ -14,10 +14,43 @@ namespace SocialJohnny.Controllers
 
         public ActionResult Index()
         {
+
+            if (TempData.ContainsKey("DeleteGroup"))
+                ViewBag.deleteMessage = TempData["DeleteGroup"].ToString();
+
+            if (TempData.ContainsKey("AddGroup"))
+                ViewBag.addMessage = TempData["AddGroup"].ToString();
+
+            if (TempData.ContainsKey("EditGroup"))
+                ViewBag.editMessage = TempData["EditGroup"].ToString();
+
+
+            var posts = from post in db.Posts
+                        select post;
+            ViewBag.Posts = posts;
             var groups = from Group in db.Groups
                          select Group;
             ViewBag.groups = groups;
             return View();
+        }
+        
+        public ActionResult IndexReload(Group reloadGroup)
+        {
+            if (TempData.ContainsKey("DeleteGroup"))
+                ViewBag.deleteMessage = TempData["DeleteGroup"].ToString();
+
+            if (TempData.ContainsKey("AddGroup"))
+                ViewBag.addMessage = TempData["DeleteGroup"].ToString();
+
+            if (TempData.ContainsKey("EditGroup"))
+                ViewBag.editMessage = TempData["EditGroup"].ToString();
+            var posts = from post in db.Posts
+                        select post;
+            ViewBag.Posts = posts;
+            var groups = from Group in db.Groups
+                         select Group;
+            ViewBag.groups = groups;
+            return View("Index", reloadGroup);
         }
 
         [HttpPost]
@@ -26,9 +59,15 @@ namespace SocialJohnny.Controllers
 
             try
             {
-                db.Groups.Add(group);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Groups.Add(group);
+                    db.SaveChanges();
+                    TempData["AddGroup"] = "Grupul a fost creat cu succes";
+                    return RedirectToAction("Index");
+                }
+                else
+                    return RedirectToAction("IndexReload", group);
             }
             catch (Exception e)
             {
@@ -57,6 +96,8 @@ namespace SocialJohnny.Controllers
                     group.IsPrivate = requestGroup.IsPrivate;
                     db.SaveChanges();
                 }
+                TempData["EditGroup"] = "Grupul " + group.Name + " modificata cu succes!";
+
                 return RedirectToAction("Index");
 
             }
@@ -77,6 +118,8 @@ namespace SocialJohnny.Controllers
                 Group group= db.Groups.Find(id);
                 db.Groups.Remove(group);
                 db.SaveChanges();
+                TempData["DeleteGroup"] = "Grupul " + group.Name + " a fost stears cu succes";
+
                 return RedirectToAction("DeletePosts/" + id.ToString(), "Posts");
             }
             catch (Exception e)

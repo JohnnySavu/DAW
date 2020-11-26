@@ -10,7 +10,7 @@ namespace SocialJohnny.Models
     {
         [Key]
         public int GroupId { get; set; }
-        [Required]
+        [Required (ErrorMessage = "Numele este obligatoriu")]
         public string Name { get; set; }
         [Required]
         public bool IsPrivate { get; set; }

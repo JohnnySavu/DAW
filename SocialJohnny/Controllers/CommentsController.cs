@@ -14,6 +14,16 @@ namespace SocialJohnny.Controllers
 
         public ActionResult Index(int id)
         {
+            if (TempData.ContainsKey("DeleteComment"))
+                ViewBag.deleteMessage = TempData["DeleteComment"].ToString();
+
+            if (TempData.ContainsKey("AddComment"))
+                ViewBag.addMessage = TempData["AddComment"].ToString();
+
+            if (TempData.ContainsKey("EditComment"))
+                ViewBag.editMessage = TempData["EdditComment"].ToString();
+
+
             var comments = from comment in db.Comments
                            where comment.PostId == id
                            select comment;
@@ -23,15 +33,43 @@ namespace SocialJohnny.Controllers
             return View();
         }
 
+        public ActionResult IndexReload(int id,Comment reloadComment)
+        {
+            if (TempData.ContainsKey("DeleteComment"))
+                ViewBag.deleteMessage = TempData["DeleteComment"].ToString();
+
+            if (TempData.ContainsKey("AddComment"))
+                ViewBag.addMessage = TempData["AddComment"].ToString();
+
+            if (TempData.ContainsKey("EditComment"))
+                ViewBag.editMessage = TempData["EdditComment"].ToString();
+
+
+            var comments = from comment in db.Comments
+                           where comment.PostId == id
+                           select comment;
+
+            ViewBag.comments = comments;
+            ViewBag.PostId = id;
+            return View("Index",reloadComment);
+
+        }
+
         [HttpPost]
         public ActionResult New(Comment comment)
         {
             comment.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
             try
             {
-                db.Comments.Add(comment);
-                db.SaveChanges();
-                return RedirectToAction("Index/" + comment.PostId.ToString());
+                if (ModelState.IsValid)
+                {
+                    db.Comments.Add(comment);
+                    db.SaveChanges();
+                    TempData["AddComment"] = "Commentul a fost creata cu succes";
+                    return RedirectToAction("Index/" + comment.PostId.ToString());
+                }
+                else
+                    return RedirectToAction("IndexReload/" + comment.PostId.ToString(), comment);
             } 
             catch (Exception e)
             {
@@ -53,6 +91,7 @@ namespace SocialJohnny.Controllers
         {
             try
             {
+                 
                 Comment comment = db.Comments.Find(id);
                 if(TryUpdateModel(comment))
                 {
@@ -61,6 +100,7 @@ namespace SocialJohnny.Controllers
                     db.SaveChanges();
                 }
                 return RedirectToAction("Index/" + comment.PostId.ToString());
+                
             }
             catch (Exception e)
             {
@@ -76,6 +116,8 @@ namespace SocialJohnny.Controllers
                 Comment comment= db.Comments.Find(id);
                 db.Comments.Remove(comment);
                 db.SaveChanges();
+                TempData["DeleteComment"] = "Commentariul a fost stears cu succes";
+
                 return RedirectToAction("Index/" + comment.PostId.ToString());
             }
             catch (Exception e)

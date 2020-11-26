@@ -12,12 +12,12 @@
 
 
 <form method="post" action="/Posts/New">
-
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
     @Html.Label("Text", "Textul postarii")
     @Html.Editor("Text")
     @Html.ValidationMessageFor(m => m.Text, "Mesajul este obligatoriu", new { @class = "text-danger " })
-
+    <br />
 
     @Html.Label("Title", "Titlul postarii")
     @Html.EditorFor(m => m.Title)

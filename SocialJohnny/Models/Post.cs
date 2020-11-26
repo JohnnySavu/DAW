@@ -12,8 +12,9 @@ namespace SocialJohnny.Models
         [Key]
         public int PostId { get; set; }
         [Required (ErrorMessage = "Campul titlu este obligatoriu")]
+        [MinLength(5)]
         public string Title { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Campul Mesaj este obligatoriu")]
         public string Text { get; set; }
         public String Date { get; set; }
 

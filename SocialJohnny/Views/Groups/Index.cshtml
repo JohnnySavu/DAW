@@ -1,15 +1,21 @@
-﻿
+﻿@model SocialJohnny.Models.Group
+
+
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Groups</h2>
 
+<h3>@ViewBag.deleteMessage</h3>
+<h3>@ViewBag.addMessage</h3>
+<h3>@ViewBag.editMessage</h3>
 
 <form method="post" action="/Groups/New">
 
-    <label>Nume grup</label>
-    <input type="text" name="Name" />
+    @Html.Label("Name", "Nume Grup")
+    @Html.Editor("Name")
+    @Html.ValidationMessageFor(m => m.Name, "Numele este obligatoriu", new { @class = "text-danger " })
 
     <label>Privat</label>
     <select name="IsPrivate">
