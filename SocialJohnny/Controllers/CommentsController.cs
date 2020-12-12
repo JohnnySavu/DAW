@@ -10,7 +10,7 @@ namespace SocialJohnny.Controllers
     public class CommentsController : Controller
     {
         // GET: Comments
-        private AppDbContext db = new AppDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ActionResult Index(int id)
         {

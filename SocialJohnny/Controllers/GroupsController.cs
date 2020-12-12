@@ -10,7 +10,7 @@ namespace SocialJohnny.Controllers
     public class GroupsController : Controller
     {
         // GET: Groups
-        private AppDbContext db = new AppDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ActionResult Index()
         {

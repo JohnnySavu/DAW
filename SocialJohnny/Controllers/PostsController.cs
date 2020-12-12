@@ -10,7 +10,7 @@ namespace SocialJohnny.Controllers
 {
     public class PostsController : Controller
     {
-        private AppDbContext db = new AppDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Posts
         public ActionResult Index()
         {

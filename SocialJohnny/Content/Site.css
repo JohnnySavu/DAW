@@ -1,12 +1,4 @@
-﻿.field-validation-valid {
-    display: none;
-}
-
-.validation-summary-valid {
-    display: none;
-}
-
-body {
+﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
