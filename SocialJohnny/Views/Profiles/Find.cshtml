@@ -14,6 +14,10 @@
     <h2>@profile.LastName</h2>
     <br />
 
+    <form method = "post" action="/Profiles/FriendRequest/@profile.ProfileId">
+        <input type="hidden" value="@ViewBag.nickname" />
+        <button type="submit">Send Friend Request</button> 
+    </form>
 
 
     <br />

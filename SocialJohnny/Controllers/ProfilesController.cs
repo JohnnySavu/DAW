@@ -18,6 +18,41 @@ namespace SocialJohnny.Controllers
         }
 
 
+        public ActionResult FriendRequest(int id, string nickname)
+        {
+            Profile profileRequested = db.Profiles.Find(id);
+            string currId = User.Identity.GetUserId();
+            var profiles = from p in db.Profiles
+                           where p.UserId == currId
+                           select p;
+
+            Profile currentProfile = new Profile();
+            foreach(var elem in profiles)
+            {
+                currentProfile = elem;
+                break;
+            }
+
+            try
+            {
+                if(TryUpdateModel(currentProfile))
+                {
+                    currentProfile.FriendRequests.Add(profileRequested);
+                    db.SaveChanges();
+                    return RedirectToAction("Find", "Profiles", nickname);
+                }
+                else
+                {
+                    return View("FailedProfile");
+                }
+            }
+            catch(Exception e)
+            {
+                return View("FailedProfile");
+            }
+
+        }
+
         [Authorize(Roles = "Admin, User")]
         public ActionResult ViewEdit()
         {
@@ -46,8 +81,11 @@ namespace SocialJohnny.Controllers
                            p.IsPrivate == false
                            select p;
             ViewBag.profiles = profiles;
+            ViewBag.nickname = nickname;
             return View();
         }
+
+
 
         [Authorize(Roles="Admin, User")]
         public ActionResult Edit(int id, Profile requestProfile)
