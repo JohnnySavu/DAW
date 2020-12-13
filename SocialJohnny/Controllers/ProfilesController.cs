@@ -36,6 +36,16 @@ namespace SocialJohnny.Controllers
 
         }
 
+        public ActionResult Find(string nickname)
+        {
+            var profiles = from p in db.Profiles
+                           where p.Nickname.Contains(nickname) &&
+                           p.IsPrivate == false
+                           select p;
+            ViewBag.profiles = profiles;
+            return View();
+        }
+
         [Authorize(Roles="Admin, User")]
         public ActionResult Edit(int id, Profile requestProfile)
         {
@@ -44,13 +54,30 @@ namespace SocialJohnny.Controllers
                 return View("FailedProfile");
             if (User.Identity.GetUserId() != currentProfile.UserId)
                 return View("FailedProfile");
-            
+           
+            //check for multiple nicknames 
+            var profiles = from p in db.Profiles
+                          where p.Nickname == requestProfile.Nickname
+                          select p;
+
+            //the Nickname is already taken
+            int count = 0;
+            //        foreach(var elem in profiles)
+            //      {
+            //              count++;
+            //            }
+
+            //if (count > 0)
+            //    return View("FailedProfile");
             try
             {
                 if (TryUpdateModel(currentProfile))
                 {
                     currentProfile.IsPrivate = requestProfile.IsPrivate;
-                    currentProfile.Email = requestProfile.Email;
+                    currentProfile.Nickname = requestProfile.Nickname;
+                    currentProfile.Email = currentProfile.Email;
+                    currentProfile.FirstName = requestProfile.FirstName;
+                    currentProfile.LastName = requestProfile.LastName;
                     currentProfile.City = requestProfile.City;
                     currentProfile.Job = requestProfile.Job;
                     currentProfile.Description = requestProfile.Description;
@@ -62,6 +89,7 @@ namespace SocialJohnny.Controllers
             }
             catch (Exception e)
             {
+
                 return View("FailedProfile");
             }
             

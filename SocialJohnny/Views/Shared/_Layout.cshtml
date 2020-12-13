@@ -16,7 +16,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("SocialJohnny", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <!--@Html.ActionLink("SocialJohnny", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })-->
+                <form method = "post" action="/Profiles/Find">
+                    <input type="text" name="nickname" placeholder="Search user here..." />
+                    <button type="submit">Search</button>
+                </form>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

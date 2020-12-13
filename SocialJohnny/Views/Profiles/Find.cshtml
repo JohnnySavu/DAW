@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Find";
+}
+
+<h2>@ViewBag.nickname</h2>
+
+@foreach (var profile in ViewBag.profiles)
+{
+    <h2>@profile.Nickname</h2>
+    <br />
+    <h2>@profile.FirstName</h2>
+    <br />
+    <h2>@profile.LastName</h2>
+    <br />
+
+
+
+    <br />
+}

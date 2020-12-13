@@ -44,9 +44,8 @@ namespace SocialJohnny.Controllers
             var posts = from p in db.Posts
                         where p.GroupId == id
                         select p;
-
+            ViewBag.groupId = id;
             ViewBag.posts = posts;
-
             return View();
         }
         
@@ -81,12 +80,7 @@ namespace SocialJohnny.Controllers
                 return View("FailedGroup");
             }
 
-
-
-
             return RedirectToAction("Index", "Groups");
-
-
         }
 
         public ActionResult IndexReload(Group reloadGroup)

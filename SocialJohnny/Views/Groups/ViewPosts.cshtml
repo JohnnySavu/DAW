@@ -1,7 +1,54 @@
-﻿
+﻿@model SocialJohnny.Models.Post
+
 @{
-    ViewBag.Title = "ViewPosts";
+    ViewBag.Title = "Index";
 }
 
-<h2>ViewPosts</h2>
+<h2>Postari</h2>
 
+<h3>@ViewBag.deleteMessage</h3>
+<h3>@ViewBag.addMessage</h3>
+<h3>@ViewBag.editMessage</h3>
+
+
+<form method="post" action="/Posts/New">
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+    @Html.Label("Text", "Textul postarii")
+    @Html.Editor("Text")
+    @Html.ValidationMessageFor(m => m.Text, "Mesajul este obligatoriu", new { @class = "text-danger " })
+    <br />
+
+    @Html.Label("Title", "Titlul postarii")
+    @Html.EditorFor(m => m.Title)
+
+    @Html.ValidationMessageFor(m => m.Title, "Titlul este obligatoriu", new { @class = "text-danger " })
+
+    <input type="hidden" name="GroupId" value="@ViewBag.groupId" />
+
+    <button type=" submit">Adauga</button>
+
+</form>
+
+
+@foreach (var post in ViewBag.Posts)
+{
+    <h1>@post.Title</h1>
+    <h2>@post.Text</h2>
+    <h3>@post.Date</h3>
+    <form action="/Posts/Edit/@post.PostId">
+        <button type="submit">Edit Post</button>
+    </form>
+    <form method="post" action="/Posts/Delete/@post.PostId">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button type="submit">Delete Post</button>
+    </form>
+    <form action="/Comments/Index/@post.PostId">
+        <button type="submit">Show Comments</button>
+    </form>
+
+
+
+
+    <br />
+}
