@@ -21,7 +21,11 @@ namespace SocialJohnny.Models
         //Fk
         public int GroupId { get; set; }
 
+        public virtual Group Group { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
+
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
     
     }
     

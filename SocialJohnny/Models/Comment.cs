@@ -19,5 +19,7 @@ namespace SocialJohnny.Models
 
         public virtual Post Post { get; set; }
 
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

@@ -23,6 +23,10 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Feed", "Index", "Posts")</li>
                     <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Change your profile", "ViewEdit", "Profiles")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

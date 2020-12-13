@@ -1,4 +1,5 @@
-﻿using SocialJohnny.Models;
+﻿using Microsoft.AspNet.Identity;
+using SocialJohnny.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,8 @@ namespace SocialJohnny.Controllers
         public ActionResult New(Post post)
         {
             post.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
-
+            //Profile user = db.Profiles.Find();
+            //post.UserId = User.Identity.GetUserId();
             try
             {
                 if (ModelState.IsValid)

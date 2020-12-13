@@ -1,0 +1,26 @@
+﻿@model SocialJohnny.Models.Profile
+
+<h2>Editare Profil</h2>
+
+<form method="post" action="/Profiles/Edit/@Model.ProfileId">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+
+    @Html.Label("IsPrivate", "Profil Privat")
+    @Html.Editor("IsPrivate")
+    <br />
+    @Html.Label("Email", "Email")
+    @Html.Editor("Email")
+    <br />
+    @Html.Label("City", "Oras")
+    @Html.Editor("City")
+    <br />
+    @Html.Label("Job", "Loc de munca")
+    @Html.Editor("Job")
+    <br />
+    @Html.Label("Description", "Descriere")
+    @Html.Editor("Description")
+
+
+    <button type=" submit">Modifica profilul</button>
+
+</form>

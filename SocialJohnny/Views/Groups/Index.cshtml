@@ -30,13 +30,25 @@
 
 @foreach (var group in ViewBag.groups)
 {
+    if (group.GroupId != 1) { 
     <h1>@group.Name</h1>
     <form action="/Groups/Edit/@group.GroupId">
         <button type="submit">Edit Group</button>
     </form>
+
+    <form method = "post" action="/Groups/AddToGroup/@group.GroupId">
+        <button type="submit">Join Group</button>
+    </form>
+
     <form method="post" action="/Groups/Delete/@group.GroupId">
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button type="submit">Delete Group</button>
     </form>
+
+    <form action="/Groups/ViewPosts/@group.GroupId">
+        <button type="submit">View Group's Posts</button>
+    </form>
+
+    }
     <br />
 }

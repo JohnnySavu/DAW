@@ -151,19 +151,47 @@ namespace SocialJohnny.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    UserManager.AddToRole(user.Id, "User");
+
+                    // create the profile page !!
+                    //return RedirectToAction("CreateProfile", "Profile", user);
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    var profile = new Profile();
+                    profile.UserId = user.Id;
+                    profile.IsPrivate = true;
+                    profile.Email = user.Email;
+                    try
+                    {
+                        if (ModelState.IsValid)
+                        {
+                            db.Profiles.Add(profile);
+                            db.SaveChanges();
+                            TempData["AddPost"] = "Postarea a fost creata cu succes";
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index","Profile");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return RedirectToAction("Index", "Profile");
+                    }
+
+                    //return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }

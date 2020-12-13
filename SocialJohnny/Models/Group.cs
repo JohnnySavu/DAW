@@ -8,6 +8,10 @@ namespace SocialJohnny.Models
 {
     public class Group
     {
+        public Group ()
+        {
+            //this.Profiles = new HashSet<Profile>();
+        }
         [Key]
         public int GroupId { get; set; }
         [Required (ErrorMessage = "Numele este obligatoriu")]
@@ -17,5 +21,6 @@ namespace SocialJohnny.Models
 
         public virtual ICollection <Post> Posts { get; set; }
 
+        public virtual ICollection <Profile> Profiles { get; set; }
     }
 }
