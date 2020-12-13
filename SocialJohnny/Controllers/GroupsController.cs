@@ -16,6 +16,8 @@ namespace SocialJohnny.Controllers
 
         public ActionResult Index()
         {
+            if (TempData.ContainsKey("AddedToGroup"))
+                ViewBag.addedToGroup = TempData["AddedToGroup"].ToString();
 
             if (TempData.ContainsKey("DeleteGroup"))
                 ViewBag.deleteMessage = TempData["DeleteGroup"].ToString();
@@ -69,10 +71,13 @@ namespace SocialJohnny.Controllers
             {
                 if (TryUpdateModel(group))
                 {
-
+                    TempData["AddedToGroup"] = "Successfully added to group!";
                     group.Profiles.Add(profileToAdd);
                     db.SaveChanges();
+                    return RedirectToAction("Index", "Groups");
                 }
+                else
+                    return View("FailedGroup");
             }
             catch (Exception e)
             {
@@ -80,7 +85,6 @@ namespace SocialJohnny.Controllers
                 return View("FailedGroup");
             }
 
-            return RedirectToAction("Index", "Groups");
         }
 
         public ActionResult IndexReload(Group reloadGroup)

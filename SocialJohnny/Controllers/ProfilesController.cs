@@ -21,6 +21,9 @@ namespace SocialJohnny.Controllers
         [Authorize(Roles = "Admin, User")]
         public ActionResult ViewEdit()
         {
+            if (TempData.ContainsKey("WrongNickName"))
+                ViewBag.NicknameMessage = TempData["WrongNickName"].ToString();
+
             string _userId = User.Identity.GetUserId();
             var _profile = from p in db.Profiles
                            where p.UserId == _userId
@@ -62,13 +65,17 @@ namespace SocialJohnny.Controllers
 
             //the Nickname is already taken
             int count = 0;
-            //        foreach(var elem in profiles)
-            //      {
-            //              count++;
-            //            }
+            foreach(var elem in profiles)
+            {
+                count++;
+            }
 
-            //if (count > 0)
-            //    return View("FailedProfile");
+            if (count > 0)
+            {
+                TempData["WrongNickname"] = "The nickname is already used";
+                return RedirectToAction("ViewEdit", "Profiles");
+
+            }
             try
             {
                 if (TryUpdateModel(currentProfile))
