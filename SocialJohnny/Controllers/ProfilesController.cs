@@ -17,6 +17,45 @@ namespace SocialJohnny.Controllers
             return View("FailedProfile");
         }
 
+        public ActionResult ShowFriendRequest()
+        {
+            string currId = User.Identity.GetUserId();
+            Profile currentProfile = new Profile();
+            Profile auxProfile = new Profile();
+            List<Profile> profileList = new List<Profile>();
+            List<Profile> auxProfileList = new List<Profile>();
+
+            var varProfile = from p in db.Profiles
+                             where p.UserId == currId
+                             select p;
+
+            foreach(var elem in varProfile)
+            {
+                currentProfile = elem;
+                break;
+            }
+
+            var profiles = from p in db.Profiles
+                           select p;
+    
+            foreach (var elem in profiles)
+            {
+                auxProfile = elem;
+                auxProfileList.Add(auxProfile);
+            }
+
+            foreach(Profile elem in auxProfileList)
+            {
+                if (elem.FriendRequests.Contains(currentProfile))
+                    profileList.Add(elem);
+            }
+            
+
+            ViewBag.profiles = profileList;
+
+            return View("ShowFriendRequest");
+        }
+
 
         public ActionResult FriendRequest(int id, string nickname)
         {
@@ -39,15 +78,20 @@ namespace SocialJohnny.Controllers
                 {
                     currentProfile.FriendRequests.Add(profileRequested);
                     db.SaveChanges();
+                    ViewBag.FaieldRequest = nickname;
+
+                    //return View("FailedProfile");
                     return RedirectToAction("Find", "Profiles", nickname);
                 }
                 else
                 {
+                    ViewBag.FaieldRequest = "1";
                     return View("FailedProfile");
                 }
             }
             catch(Exception e)
             {
+                ViewBag.FaieldRequest = "2";
                 return View("FailedProfile");
             }
 
@@ -76,10 +120,13 @@ namespace SocialJohnny.Controllers
 
         public ActionResult Find(string nickname)
         {
+            string currId = User.Identity.GetUserId();
             var profiles = from p in db.Profiles
                            where p.Nickname.Contains(nickname) &&
-                           p.IsPrivate == false
+                           p.IsPrivate == false &&
+                           p.UserId != currId
                            select p;
+
             ViewBag.profiles = profiles;
             ViewBag.nickname = nickname;
             return View();

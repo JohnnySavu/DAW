@@ -30,6 +30,7 @@
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Change your profile", "ViewEdit", "Profiles")</li>
+                        <li>@Html.ActionLink("See friend requests", "ShowFriendRequest", "Profiles")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
