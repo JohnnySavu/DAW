@@ -13,7 +13,13 @@
     <br />
     <h2>@profile.LastName</h2>
     <br />
-
+    <form action="/Profiles/AcceptRequest/@profile.ProfileId">
+        <button type="submit">Accept Request</button>
+    </form>
+    <br />
+    <form action="/Profiles/DeleteRequest/@profile.ProfileId">
+        <button type="submit">Delete Request</button>
+    </form>
 
 
     <br />

@@ -79,9 +79,8 @@ namespace SocialJohnny.Controllers
                     currentProfile.FriendRequests.Add(profileRequested);
                     db.SaveChanges();
                     ViewBag.FaieldRequest = nickname;
-
-                    //return View("FailedProfile");
-                    return RedirectToAction("Find", "Profiles", nickname);
+                    
+                    return RedirectToAction("ShowFriendRequest", "Profiles");
                 }
                 else
                 {
@@ -155,6 +154,10 @@ namespace SocialJohnny.Controllers
                 count++;
             }
 
+            //it means i won't change my nickname 
+            if (currentProfile.Nickname == requestProfile.Nickname)
+                count = 0;
+
             if (count > 0)
             {
                 TempData["WrongNickname"] = "The nickname is already used";
@@ -181,7 +184,6 @@ namespace SocialJohnny.Controllers
             }
             catch (Exception e)
             {
-
                 return View("FailedProfile");
             }
             
