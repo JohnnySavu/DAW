@@ -17,6 +17,85 @@ namespace SocialJohnny.Controllers
             return View("FailedProfile");
         }
 
+        public ActionResult AcceptRequest(int id)
+        {
+            string currId = User.Identity.GetUserId();
+
+            Profile currentProfile = new Profile();
+            Profile friendProfile = new Profile();
+
+            var varCurrentProfile = from p in db.Profiles
+                                    where p.UserId == currId
+                                    select p;
+            foreach(var elem in varCurrentProfile)
+            {
+                currentProfile = elem;
+                break;
+            }
+
+            friendProfile = db.Profiles.Find(id);
+
+            try
+            {
+                if (TryUpdateModel(friendProfile))
+                {
+                    friendProfile.FriendRequests.Remove(currentProfile);
+                    friendProfile.Friends.Add(currentProfile);
+                    db.SaveChanges();
+                }
+                else
+                    return View("FailedProfiles");
+
+                if (TryUpdateModel(currentProfile))
+                {
+                    currentProfile.Friends.Add(friendProfile);
+                    db.SaveChanges();
+                }
+                else
+                    return View("FailedProfiles");
+            }
+            catch (Exception e)
+            {
+                return View("FailedProfiles");
+            }
+            return RedirectToAction("ShowFriendRequest", "Profiles");
+        }
+
+        public ActionResult DeleteRequest(int id)
+        {
+            string currId = User.Identity.GetUserId();
+
+            Profile currentProfile = new Profile();
+            Profile friendProfile = new Profile();
+
+            var varCurrentProfile = from p in db.Profiles
+                                    where p.UserId == currId
+                                    select p;
+            foreach (var elem in varCurrentProfile)
+            {
+                currentProfile = elem;
+                break;
+            }
+
+            friendProfile = db.Profiles.Find(id);
+
+            try
+            {
+                if (TryUpdateModel(friendProfile))
+                {
+                    friendProfile.FriendRequests.Remove(currentProfile);
+                    db.SaveChanges();
+                }
+                else
+                    return View("FailedProfiles");
+            }
+            catch (Exception e)
+            {
+                return View("FailedProfiles");
+            }
+            return RedirectToAction("ShowFriendRequest", "Profiles");
+        }
+
         public ActionResult ShowFriendRequest()
         {
             string currId = User.Identity.GetUserId();
