@@ -30,6 +30,7 @@ namespace SocialJohnny.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<FriendsProfile> FriendsProfiles { get; set; }
 
         public static ApplicationDbContext Create()
         {

@@ -36,7 +36,7 @@ namespace SocialJohnny.Models
 
         public virtual ICollection <Group> Groups { get; set; }
         public virtual ICollection <Profile> FriendRequests { get; set; }
-        public virtual ICollection <Profile> Friends { get; set; }
-
+        public virtual ICollection <FriendsProfile> Friends { get; set; }
+        
     }
 }

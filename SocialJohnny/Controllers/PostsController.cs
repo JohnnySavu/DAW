@@ -26,6 +26,10 @@ namespace SocialJohnny.Controllers
                 ViewBag.editMessage = TempData["EditPost"].ToString();
 
 
+            if (TempData.ContainsKey("Allow"))
+                ViewBag.editMessage = TempData["Allow"].ToString();
+
+
             var posts = from post in db.Posts
                         select post;
             ViewBag.Posts = posts;
@@ -44,6 +48,8 @@ namespace SocialJohnny.Controllers
             if (TempData.ContainsKey("EditPost"))
                 ViewBag.editMessage = TempData["EditPost"].ToString();
 
+            if (TempData.ContainsKey("Allow"))
+                ViewBag.editMessage = TempData["Allow"].ToString();
 
             var posts = from post in db.Posts
                         select post;
@@ -55,11 +61,11 @@ namespace SocialJohnny.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult New(Post post)
         {
             post.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
-            //Profile user = db.Profiles.Find();
-            //post.UserId = User.Identity.GetUserId();
+            post.UserId = User.Identity.GetUserId();
             try
             {
                 if (ModelState.IsValid)
@@ -80,22 +86,35 @@ namespace SocialJohnny.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Edit(int id)
         {
             Post post = db.Posts.Find(id);
             if (post == null)
                 return RedirectToAction("Index");
+
+            if (post.UserId != User.Identity.GetUserId() && !(User.IsInRole("Admin")))
+            {
+                TempData["Allow"] = "Nu aveti suficiente drepturi";
+                return RedirectToAction("Index");
+            }
             //ViewBag.post = post;
             return View(post);
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Edit(int id, Post requestPost)
         {
             try
             {
                 Post post = db.Posts.Find(id);
-                if(TryUpdateModel(post))
+                if (post.UserId != User.Identity.GetUserId() && !(User.IsInRole("Admin")))
+                {
+                    TempData["Allow"] = "Nu aveti suficiente drepturi";
+                    return RedirectToAction("Index");
+                }
+                if (TryUpdateModel(post))
                 {
                     post.Text = requestPost.Text;
                     post.Title = requestPost.Title;
@@ -111,6 +130,7 @@ namespace SocialJohnny.Controllers
                 return View("FailedPost");
             }
         }
+
 
         public ActionResult DeletePosts(int id)
         {
@@ -142,10 +162,19 @@ namespace SocialJohnny.Controllers
 
 
         [HttpDelete]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Delete(int id)
         {
             try
             {
+                Post post = db.Posts.Find(id);
+
+                if (post.UserId != User.Identity.GetUserId() && !(User.IsInRole("Admin")))
+                {
+                    TempData["Allow"] = "Nu aveti suficiente drepturi";
+                    return RedirectToAction("Index");
+                }
+
                 var comments = from comment in db.Comments
                                where comment.PostId == id
                                select comment;
@@ -154,7 +183,7 @@ namespace SocialJohnny.Controllers
                     db.Comments.Remove(com);
                     //db.SaveChanges();
                 }
-                Post post = db.Posts.Find(id);
+                
                 db.Posts.Remove(post);
                 db.SaveChanges();
                 TempData["DeletePost"] = "Postarea " + post.Title + " a fost stearsa cu succes";
@@ -165,9 +194,6 @@ namespace SocialJohnny.Controllers
                 return View("FailedPost");
             }
         }
-
-
-
 
 
     }

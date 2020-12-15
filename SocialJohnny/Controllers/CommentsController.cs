@@ -1,4 +1,5 @@
-﻿using SocialJohnny.Models;
+﻿using Microsoft.AspNet.Identity;
+using SocialJohnny.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,9 @@ namespace SocialJohnny.Controllers
             if (TempData.ContainsKey("EditComment"))
                 ViewBag.editMessage = TempData["EdditComment"].ToString();
 
+            if (TempData.ContainsKey("Allow"))
+                ViewBag.Allow = TempData["Allow"].ToString();
+
 
             var comments = from comment in db.Comments
                            where comment.PostId == id
@@ -44,6 +48,9 @@ namespace SocialJohnny.Controllers
             if (TempData.ContainsKey("EditComment"))
                 ViewBag.editMessage = TempData["EdditComment"].ToString();
 
+            if (TempData.ContainsKey("Allow"))
+                ViewBag.Allow = TempData["Allow"].ToString();
+
 
             var comments = from comment in db.Comments
                            where comment.PostId == id
@@ -56,8 +63,10 @@ namespace SocialJohnny.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult New(Comment comment)
         {
+            comment.UserId = User.Identity.GetUserId();
             comment.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
             try
             {
@@ -77,23 +86,37 @@ namespace SocialJohnny.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Edit(int id)
         {
+
             Comment comment = db.Comments.Find(id);
             if (comment == null)
-                return RedirectToAction("FailedComment");
+                return View("FailedComment");
+            if (comment.UserId != User.Identity.GetUserId() && !(User.IsInRole("Admin")))
+            {
+                TempData["Allow"] = "Nu aveti suficiente drepturi";
+                return RedirectToAction("Index/" + comment.PostId.ToString());
+            }
 
             return View(comment);
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Edit(int id, Comment requestComment)
         {
             try
             {
                  
                 Comment comment = db.Comments.Find(id);
-                if(TryUpdateModel(comment))
+                if (comment.UserId != User.Identity.GetUserId() && !(User.IsInRole("Admin")))
+                {
+                    TempData["Allow"] = "Nu aveti suficiente drepturi";
+                    return RedirectToAction("Index/" + comment.PostId.ToString());
+                }
+
+                if (TryUpdateModel(comment))
                 {
                     comment.Text = requestComment.Text;
                     comment.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
@@ -109,14 +132,20 @@ namespace SocialJohnny.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Delete(int id)
         {
             try
             {
                 Comment comment= db.Comments.Find(id);
+                if (comment.UserId != User.Identity.GetUserId() && !(User.IsInRole("Admin")))
+                {
+                    TempData["Allow"] = "Nu aveti suficiente drepturi";
+                    return RedirectToAction("Index/" + comment.PostId.ToString());
+                }
                 db.Comments.Remove(comment);
                 db.SaveChanges();
-                TempData["DeleteComment"] = "Commentariul a fost stears cu succes";
+                TempData["DeleteComment"] = "Commentariul a fost sters cu succes";
 
                 return RedirectToAction("Index/" + comment.PostId.ToString());
             }

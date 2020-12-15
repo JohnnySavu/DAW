@@ -107,6 +107,7 @@ namespace SocialJohnny.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles ="Admin,User")]
         public ActionResult New(Group group)
         {
 
@@ -127,7 +128,7 @@ namespace SocialJohnny.Controllers
                 return View("FailedGroup");
             }
         }
-
+        [Authorize(Roles ="Admin,User")]
         public ActionResult Edit(int id)
         {
             Group group = db.Groups.Find(id);
@@ -138,6 +139,7 @@ namespace SocialJohnny.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Edit(int id, Group requestGroup)
         {
             try
@@ -161,6 +163,7 @@ namespace SocialJohnny.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Delete(int id)
         {
             try

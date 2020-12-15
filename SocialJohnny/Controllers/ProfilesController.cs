@@ -17,52 +17,124 @@ namespace SocialJohnny.Controllers
             return View("FailedProfile");
         }
 
-        public ActionResult AcceptRequest(int id)
+        [Authorize(Roles ="Admin,User")]
+        public ActionResult ShowFriends()
         {
-            string currId = User.Identity.GetUserId();
-
             Profile currentProfile = new Profile();
-            Profile friendProfile = new Profile();
-
-            var varCurrentProfile = from p in db.Profiles
-                                    where p.UserId == currId
-                                    select p;
-            foreach(var elem in varCurrentProfile)
+            string currId = User.Identity.GetUserId();
+            List<Profile> friendsList = new List<Profile>();
+            List<FriendsProfile> allProfiles = new List<FriendsProfile>();
+            //get current profile
+            var varProfiles = from p in db.Profiles
+                              where p.UserId == currId
+                              select p;
+            foreach(var elem in varProfiles)
             {
                 currentProfile = elem;
                 break;
             }
 
-            friendProfile = db.Profiles.Find(id);
+            //get all profiles
+            var varProfiles2 = from p in db.FriendsProfiles
+                          select p;
+            foreach(var elem in varProfiles2)
+            {
+                allProfiles.Add(elem);
+            }
 
+            foreach(FriendsProfile userProfile in allProfiles)
+            {
+                if (currentProfile.Friends.Contains(userProfile))
+                    friendsList.Add(db.Profiles.Find(userProfile.Id));
+            }
+            ViewBag.friends = friendsList;
+            return View();
+        }
+
+
+        [Authorize(Roles ="Admin,User")]
+        public ActionResult AcceptRequest(int id)
+        {
+            string currId = User.Identity.GetUserId();
+
+            //get the involved profiles
+            Profile currentProfile = new Profile();
+            Profile friendProfile = new Profile();
+
+            //get currentprofile from the database
+            var varCurrentProfile = from p in db.Profiles
+                                    where p.UserId == currId
+                                    select p;
+            //save it in currentProfile
+            foreach(var elem in varCurrentProfile)
+            {
+                currentProfile = elem;
+                break;
+            }
+            //find the friend Profile
+            friendProfile = db.Profiles.Find(id);
+            //find the profiles for the friend request
+            FriendsProfile friendsCurrentProfile = new FriendsProfile();
+            FriendsProfile friendsNextProfile = new FriendsProfile();
+
+            //get the profile from database and save it in friendsNextProfile.
+            var varFriends = from f in db.FriendsProfiles
+                             where f.UserId == friendProfile.UserId
+                             select f;
+            foreach(var elem in varFriends)
+            {
+                friendsNextProfile = elem;
+                break;
+            }
+
+            var varFriendsCurr = from f in db.FriendsProfiles
+                         where f.UserId == currentProfile.UserId
+                         select f;
+            foreach(var elem in varFriendsCurr)
+            {
+                friendsCurrentProfile = elem;
+                break;
+            }
+            
             try
             {
-                if (TryUpdateModel(friendProfile))
-                {
-                    friendProfile.FriendRequests.Remove(currentProfile);
-                    friendProfile.Friends.Add(currentProfile);
-                    db.SaveChanges();
-                }
-                else
-                    return View("FailedProfiles");
-
                 if (TryUpdateModel(currentProfile))
                 {
-                    currentProfile.Friends.Add(friendProfile);
+
+                    currentProfile.Friends.Add(friendsNextProfile);
                     db.SaveChanges();
                 }
                 else
-                    return View("FailedProfiles");
+                {
+                    ViewBag.Test = "1"; return View("FailedProfile");
+                }
+
+                if (TryUpdateModel(friendProfile))
+                {
+                    friendProfile.Friends.Add(friendsCurrentProfile);
+                    friendProfile.FriendRequests.Remove(currentProfile);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ViewBag.Test = "2"; return View("FailedProfile");
+                }
+
             }
             catch (Exception e)
             {
-                return View("FailedProfiles");
+
+                ViewBag.Test = e.ToString();
+                return View("FailedProfile");
             }
             return RedirectToAction("ShowFriendRequest", "Profiles");
         }
 
+        //delete a friend Reuquest
+        [Authorize(Roles ="Admin,User")]
         public ActionResult DeleteRequest(int id)
         {
+            //find the current Profile
             string currId = User.Identity.GetUserId();
 
             Profile currentProfile = new Profile();
@@ -96,18 +168,22 @@ namespace SocialJohnny.Controllers
             return RedirectToAction("ShowFriendRequest", "Profiles");
         }
 
+        //self explanatory
+        [Authorize(Roles ="Admin,User")]
         public ActionResult ShowFriendRequest()
         {
+            //find the current profile
             string currId = User.Identity.GetUserId();
             Profile currentProfile = new Profile();
             Profile auxProfile = new Profile();
+            //the list of profiles that have a friend request on the current profile
             List<Profile> profileList = new List<Profile>();
             List<Profile> auxProfileList = new List<Profile>();
 
             var varProfile = from p in db.Profiles
                              where p.UserId == currId
                              select p;
-
+            //find the current profile
             foreach(var elem in varProfile)
             {
                 currentProfile = elem;
@@ -116,13 +192,13 @@ namespace SocialJohnny.Controllers
 
             var profiles = from p in db.Profiles
                            select p;
-    
+            //get a list of all profiles
             foreach (var elem in profiles)
             {
                 auxProfile = elem;
                 auxProfileList.Add(auxProfile);
             }
-
+            //get the list of all profiles that have the currentProfile as a friendReuqest
             foreach(Profile elem in auxProfileList)
             {
                 if (elem.FriendRequests.Contains(currentProfile))
@@ -135,22 +211,26 @@ namespace SocialJohnny.Controllers
             return View("ShowFriendRequest");
         }
 
-
+        //add Friend Request
+        [Authorize(Roles =("Admin, User"))]
         public ActionResult FriendRequest(int id, string nickname)
         {
+            //get the requested friend profile
             Profile profileRequested = db.Profiles.Find(id);
+            
+            //find the current profile
             string currId = User.Identity.GetUserId();
             var profiles = from p in db.Profiles
                            where p.UserId == currId
                            select p;
-
+            //and save it 
             Profile currentProfile = new Profile();
             foreach(var elem in profiles)
             {
                 currentProfile = elem;
                 break;
             }
-
+            //save it in database
             try
             {
                 if(TryUpdateModel(currentProfile))
@@ -196,6 +276,7 @@ namespace SocialJohnny.Controllers
 
         }
 
+        //done, authorized for everyone
         public ActionResult Find(string nickname)
         {
             string currId = User.Identity.GetUserId();
@@ -210,8 +291,7 @@ namespace SocialJohnny.Controllers
             return View();
         }
 
-
-
+        //done 
         [Authorize(Roles="Admin, User")]
         public ActionResult Edit(int id, Profile requestProfile)
         {

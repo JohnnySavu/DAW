@@ -171,6 +171,11 @@ namespace SocialJohnny.Controllers
                     var profile = new Profile();
                     profile.UserId = user.Id;
                     profile.IsPrivate = true;
+
+                    var friendsProfile = new FriendsProfile();
+                    friendsProfile.UserId = user.Id;
+                    //friendsProfile.User = user;
+
                     profile.Email = user.Email;
                     try
                     {
@@ -178,13 +183,25 @@ namespace SocialJohnny.Controllers
                         {
                             db.Profiles.Add(profile);
                             db.SaveChanges();
-                            TempData["AddPost"] = "Postarea a fost creata cu succes";
-                            return RedirectToAction("Index", "Home");
+                            
                         }
                         else
                         {
-                            return RedirectToAction("Index","Profile");
+                            return RedirectToAction("Index", "Profile");
                         }
+
+                        if (ModelState.IsValid)
+                        {
+                            db.FriendsProfiles.Add(friendsProfile);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Profile");
+                        }
+
+                        return RedirectToAction("Index", "Home");
+
                     }
                     catch (Exception e)
                     {
