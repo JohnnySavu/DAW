@@ -3,6 +3,9 @@ using SocialJohnny.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,6 +14,40 @@ namespace SocialJohnny.Controllers
     public class CommentsController : Controller
     {
         // GET: Comments
+        private void SendEmailNotification(string toEmail, string subject, string content)
+        {
+            const string senderEmail = "ioan-daniel.savu@my.fmi.unibuc.ro";
+            const string senderPassword = "parola";
+            const string smtpServer = "smtp.gmail.com";
+            const int smtpPort = 587;
+
+            SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.EnableSsl = true;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential(senderEmail, senderPassword);
+
+            MailMessage email = new MailMessage(senderEmail, toEmail, subject, content);
+
+            email.IsBodyHtml = true;
+
+            email.BodyEncoding = UTF8Encoding.UTF8;
+
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("Sendin email...");
+                smtpClient.Send(email);
+                System.Diagnostics.Debug.WriteLine("Email sent!");
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Error occured while trying to send email");
+                System.Diagnostics.Debug.WriteLine(e.Message.ToString());
+                RedirectToAction("Index", "Home");
+            }
+        }
+
+
         private ApplicationDbContext db = new ApplicationDbContext();
 
         public ActionResult Index(int id)
@@ -141,6 +178,14 @@ namespace SocialJohnny.Controllers
                 {
                     TempData["Allow"] = "Nu aveti suficiente drepturi";
                     return RedirectToAction("Index/" + comment.PostId.ToString());
+                }
+
+                if (User.IsInRole("Admin"))
+                {
+                    string authorEmail = db.Profiles.Where(p => p.UserId == comment.UserId).ToList().First().Email;
+                    string notificationBody = "<p>Un comentariu de al dumneavoastra a fost modificat de catre administrator</p>";
+
+                    SendEmailNotification(authorEmail, "Un comentariu a fost modificat", notificationBody);
                 }
 
                 if (TryUpdateModel(comment))

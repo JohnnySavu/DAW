@@ -3,6 +3,9 @@ using SocialJohnny.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,7 +15,42 @@ namespace SocialJohnny.Controllers
     public class PostsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        // GET: Posts
+        private int _perPage = 5;
+
+        private void SendEmailNotification(string toEmail, string subject, string content)
+        {
+            const string senderEmail = "ioan-daniel.savu@my.fmi.unibuc.ro";
+            const string senderPassword = "parola";
+            const string smtpServer = "smtp.gmail.com";
+            const int smtpPort = 587;
+
+            SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.EnableSsl = true;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential(senderEmail, senderPassword);
+
+            MailMessage email = new MailMessage(senderEmail, toEmail, subject, content);
+
+            email.IsBodyHtml = true;
+
+            email.BodyEncoding = UTF8Encoding.UTF8;
+
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("Sendin email...");
+                smtpClient.Send(email);
+                System.Diagnostics.Debug.WriteLine("Email sent!");
+            }
+            catch(Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Error occured while trying to send email");
+                System.Diagnostics.Debug.WriteLine(e.Message.ToString());
+                RedirectToAction("Index", "Home");
+            }
+        }
+
+
         public ActionResult Index()
         {
 
@@ -32,8 +70,24 @@ namespace SocialJohnny.Controllers
 
             var posts = from post in db.Posts
                         where post.GroupId == 1
+                        orderby post.Date
                         select post;
-            ViewBag.Posts = posts;
+
+            var totalItems = posts.Count();
+            var currentPage = Convert.ToInt32(Request.Params.Get("page"));
+            var offset = 0;
+
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * this._perPage;
+            }
+
+            var paginatedPosts = posts.Skip(offset).Take(this._perPage);
+
+            ViewBag.total = totalItems;
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+
+            ViewBag.Posts = paginatedPosts;
             ViewBag.IsAdmin = false;
             if (Request.IsAuthenticated)
             {
@@ -140,6 +194,14 @@ namespace SocialJohnny.Controllers
                     TempData["Allow"] = "Nu aveti suficiente drepturi";
                     return RedirectToAction("Index");
                 }
+                if(User.IsInRole("Admin"))
+                {
+                    string authorEmail = db.Profiles.Where(p => p.UserId == post.UserId).ToList().First().Email;
+                    string notificationBody = "<p>O postare de a dumneavoastra a fost modificata de catre administrator</p>";
+
+                    SendEmailNotification(authorEmail, "O postare a fost modificata", notificationBody);
+                }
+
                 if (TryUpdateModel(post))
                 {
                     post.Text = requestPost.Text;

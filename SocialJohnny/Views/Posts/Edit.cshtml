@@ -10,11 +10,11 @@
     @Html.HttpMethodOverride(HttpVerbs.Put)
     @Html.Label("Text", "Text postare")
     <br />
-    @Html.TextBox("Text", null, new { @class = "form-control"})
+    @Html.TextBox("Text", Model.Text, new { @class = "form-control"})
 
 
     @Html.Label("Title", "Titlu postare")
-    @Html.TextBox("Title", null, new { @class = "form-control"})
+    @Html.TextBox("Title", Model.Title, new { @class = "form-control"})
   
     
     <button type=" submit">Modifica postarea</button>

@@ -36,26 +36,74 @@
 
 @foreach (var post in ViewBag.Posts)
 {
-    <h1>@post.Title</h1>
-    <h2>@post.Text</h2>
-    <h3>@post.Date</h3>
-    <h5>@post.OwnerNickname</h5>
-    if ((Request.IsAuthenticated && ViewBag.UserId == post.UserId) || ViewBag.IsAdmin == true)
-    {
-    <form action="/Posts/Edit/@post.PostId">
-        <button type="submit">Edit Post</button>
-    </form>
-    <form method="post" action="/Posts/Delete/@post.PostId">
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button type="submit">Delete Post</button>
-    </form>
-    }
-    <form action="/Comments/Index/@post.PostId">
-        <button type="submit">Show Comments</button>
-    </form>
+    <div class="panel panel-article">
 
 
+        <div class="panel-heading article-heading">
+            <span class="font-roboto article-title">@post.Title</span>
+        </div>
+
+        <div class="panel-body">
+            <span class="article-content-title">Continut articol</span>
+            <br />
+            <div class="article-content-wrapper">
+                @Html.Raw(@post.Text)
+            </div>
+        </div>
+        <div class="article-meta">
+            <span class="">
+                <i class="glyphicon glyphicon-time"></i>
+                @post.Date
+            </span>
+
+            <div>
+                <i class="glyphicon glyphicon-user"></i>
+                <strong> @post.OwnerNickname</strong>
+            </div>
+        </div>
+
+        <div class="panel-footer">
 
 
-    <br />
+            @if ((Request.IsAuthenticated && ViewBag.UserId == post.UserId) || ViewBag.IsAdmin == true)
+            {
+                <form action="/Posts/Edit/@post.PostId">
+                    <button type="submit">Edit Post</button>
+                </form>
+                <form method="post" action="/Posts/Delete/@post.PostId">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="btn btn-sm btn-success full-width" type="submit">Delete Post</button>
+                </form>
+            }
+            <form action="/Comments/Index/@post.PostId">
+                <button class="btn btn-sm btn-success full-width" type="submit">Show Comments</button>
+            </form>
+            <br />
+        </div>
+    </div>
 }
+
+
+<div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li>
+                <a href="/Posts/Index?page=1" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            @for (int i = 1; i <= ViewBag.lastPage; i++)
+            {
+                <li><a href="/Posts/Index?page=@i">@(i)</a></li>
+            }
+
+            <li>
+                <a href="/Posts/Index?page=@(ViewBag.lastPage)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
