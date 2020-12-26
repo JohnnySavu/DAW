@@ -23,7 +23,7 @@ namespace SocialJohnny
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/dawtm.css",
                       "~/Content/site.css"));
         }
     }

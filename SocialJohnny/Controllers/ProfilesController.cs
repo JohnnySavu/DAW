@@ -20,6 +20,8 @@ namespace SocialJohnny.Controllers
         [Authorize(Roles ="Admin,User")]
         public ActionResult ShowFriends()
         {
+            if (User.IsInRole("Admin"))
+                return RedirectToAction("Index", "Home");
             Profile currentProfile = new Profile();
             string currId = User.Identity.GetUserId();
             List<Profile> friendsList = new List<Profile>();
@@ -44,6 +46,7 @@ namespace SocialJohnny.Controllers
 
             foreach(FriendsProfile userProfile in allProfiles)
             {
+
                 if (currentProfile.Friends.Contains(userProfile))
                     friendsList.Add(db.Profiles.Find(userProfile.Id));
             }
@@ -279,10 +282,12 @@ namespace SocialJohnny.Controllers
         //done, authorized for everyone
         public ActionResult Find(string nickname)
         {
+            ViewBag.IsAdmin = false;
+            if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                ViewBag.IsAdmin = true;
             string currId = User.Identity.GetUserId();
             var profiles = from p in db.Profiles
                            where p.Nickname.Contains(nickname) &&
-                           p.IsPrivate == false &&
                            p.UserId != currId
                            select p;
 
@@ -348,6 +353,59 @@ namespace SocialJohnny.Controllers
             
         }
 
-        
-    }
+        public ActionResult ShowProfile (int id)
+        {
+            Profile currentProfile = db.Profiles.Find(id);
+            if (currentProfile.IsPrivate == false)
+                return View(currentProfile);
+            else
+                return RedirectToAction("Index", "Home");
+        }
+        [Authorize(Roles ="Admin")]
+        [HttpDelete]
+        public ActionResult DeleteProfile(int id)
+        {
+            Profile profile = db.Profiles.Find(id);
+            //ApplicationUser user = db.Users.Where(el => profile.UserId == );
+            
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize(Roles ="Admin")]
+        public ActionResult EditProfileAdmin(int id)
+        {
+            Profile profile = db.Profiles.Find(id);
+            return View(profile);
+        }
+
+
+        [HttpPut]
+        [Authorize(Roles ="Admin")]
+        public ActionResult EditProfileAdmin(int id, Profile requestProfile)
+        {
+            try
+            {
+
+                Profile profile = db.Profiles.Find(id);
+
+                if (TryUpdateModel(profile))
+                {
+                    profile.Nickname = requestProfile.Nickname;
+                    profile.Description = requestProfile.Description;
+                    profile.FirstName = requestProfile.FirstName;
+                    profile.LastName = requestProfile.LastName;
+                    profile.City = requestProfile.City;
+                   
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index", "Home");
+
+            }
+            catch (Exception e)
+            {
+                return View("FailedProfile");
+            }
+        }
+
+   }
 }

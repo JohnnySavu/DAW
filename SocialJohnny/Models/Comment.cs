@@ -13,6 +13,7 @@ namespace SocialJohnny.Models
         [Required]
         public String Text { get; set; }
         public String Date { get; set; }
+        public String OwnerNickname { get; set; }
 
         //FK
         public int PostId { get; set; }

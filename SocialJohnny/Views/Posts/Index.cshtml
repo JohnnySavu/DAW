@@ -11,32 +11,37 @@
 <h3>@ViewBag.editMessage</h3>
 <h3>@ViewBag.Allow</h3>
 
+@if (Request.IsAuthenticated)
+{
+    <form method="post" action="/Posts/New">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-<form method="post" action="/Posts/New">
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-    @Html.Label("Text", "Textul postarii")
-    @Html.Editor("Text")
-    @Html.ValidationMessageFor(m => m.Text, "Mesajul este obligatoriu", new { @class = "text-danger " })
-    <br />
+        @Html.Label("Text", "Textul postarii")
+        @Html.Editor("Text")
+        @Html.ValidationMessageFor(m => m.Text, "Mesajul este obligatoriu", new { @class = "text-danger " })
+        <br />
 
-    @Html.Label("Title", "Titlul postarii")
-    @Html.EditorFor(m => m.Title)
+        @Html.Label("Title", "Titlul postarii")
+        @Html.EditorFor(m => m.Title)
 
-    @Html.ValidationMessageFor(m => m.Title, "Titlul este obligatoriu", new { @class = "text-danger " })
+        @Html.ValidationMessageFor(m => m.Title, "Titlul este obligatoriu", new { @class = "text-danger " })
 
-    <input type="hidden" name="GroupId" value="1" />
+        <input type="hidden" name="GroupId" value="1" />
 
-    <button type=" submit">Adauga</button>
+        <button type=" submit">Adauga</button>
 
-</form>
-
+    </form>
+}
 
 @foreach (var post in ViewBag.Posts)
 {
     <h1>@post.Title</h1>
     <h2>@post.Text</h2>
     <h3>@post.Date</h3>
+    <h5>@post.OwnerNickname</h5>
+    if ((Request.IsAuthenticated && ViewBag.UserId == post.UserId) || ViewBag.IsAdmin == true)
+    {
     <form action="/Posts/Edit/@post.PostId">
         <button type="submit">Edit Post</button>
     </form>
@@ -44,6 +49,7 @@
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button type="submit">Delete Post</button>
     </form>
+    }
     <form action="/Comments/Index/@post.PostId">
         <button type="submit">Show Comments</button>
     </form>

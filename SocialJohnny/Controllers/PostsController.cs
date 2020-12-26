@@ -31,8 +31,18 @@ namespace SocialJohnny.Controllers
 
 
             var posts = from post in db.Posts
+                        where post.GroupId == 1
                         select post;
             ViewBag.Posts = posts;
+            ViewBag.IsAdmin = false;
+            if (Request.IsAuthenticated)
+            {
+                ViewBag.UserId = User.Identity.GetUserId();
+                if (User.IsInRole("Admin"))
+                    ViewBag.IsAdmin = true;
+            }
+            else
+                ViewBag.UserId = "";
 
             return View();
         }
@@ -52,8 +62,19 @@ namespace SocialJohnny.Controllers
                 ViewBag.editMessage = TempData["Allow"].ToString();
 
             var posts = from post in db.Posts
+                        where post.GroupId == 1
                         select post;
+
             ViewBag.Posts = posts;
+            ViewBag.IsAdmin = false;
+            if (Request.IsAuthenticated)
+            {
+                ViewBag.UserId = User.Identity.GetUserId();
+                if (User.IsInRole("Admin"))
+                    ViewBag.IsAdmin = true;
+            }
+            else
+                ViewBag.UserId = "";
 
             return View("Index", reloadPost);
         }
@@ -64,6 +85,11 @@ namespace SocialJohnny.Controllers
         [Authorize(Roles = "Admin,User")]
         public ActionResult New(Post post)
         {
+            string currId = User.Identity.GetUserId();
+            Profile currentProfile = db.Profiles.Where(p => p.UserId == currId).ToList().First();
+
+            post.OwnerNickname = currentProfile.Nickname;
+
             post.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
             post.UserId = User.Identity.GetUserId();
             try

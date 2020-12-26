@@ -3,22 +3,35 @@
     ViewBag.Title = "Find";
 }
 
-<h2>@ViewBag.nickname</h2>
-
 @foreach (var profile in ViewBag.profiles)
 {
     <h2>@profile.Nickname</h2>
-    <br />
-    <h2>@profile.FirstName</h2>
-    <br />
-    <h2>@profile.LastName</h2>
+    <h2>@profile.Email</h2>
     <br />
 
+    if (profile.IsPrivate == false)
+    {
+    <form action="/Profiles/ShowProfile/@profile.ProfileId">
+        <button type="submit">Show Profile</button>
+    </form>
+    }
     <form method = "post" action="/Profiles/FriendRequest/@profile.ProfileId">
         <input type="hidden" name ="nickname" value="@ViewBag.nickname" />
         <button type="submit">Send Friend Request</button> 
     </form>
 
+    if (ViewBag.IsAdmin == true)
+    {
+    <form method="post" action="/Profiles/DeleteProfile/@profile.ProfileId">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button type="submit">Delete User</button>
+    </form>
+            
+    <form action="/Profiles/EditProfileAdmin/@profile.ProfileId">
+        
+        <button type="submit">Edit User</button>
+    </form>
+    }
 
     <br />
 }

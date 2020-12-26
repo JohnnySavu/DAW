@@ -1,0 +1,37 @@
+﻿@model SocialJohnny.Models.Profile
+@{
+    ViewBag.Title = "EditProfileAdmin";
+}
+
+<h2>EditProfileAdmin</h2>
+
+<form method="post" action="/Profiles/EditProfileAdmin/@Model.ProfileId">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+    @Html.Label("Nickname", "Nickname")
+    <br />
+    @Html.TextBox("Nickname", null, new { @class = "form-control" })
+
+
+    @Html.Label("FirstName", "Prenume")
+    @Html.TextBox("FirstName", null, new { @class = "form-control" })
+
+
+
+    @Html.Label("LastName", "Nume")
+    @Html.TextBox("LastName", null, new { @class = "form-control" })
+
+
+    @Html.Label("Description", "Descriere")
+    @Html.TextBox("Description", null, new { @class = "form-control" })
+
+
+
+    @Html.Label("City", "Oras")
+    @Html.TextBox("City", null, new { @class = "form-control" })
+
+
+
+    <button type=" submit">Modifica Profilul</button>
+
+
+</form>

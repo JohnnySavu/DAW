@@ -32,6 +32,17 @@ namespace SocialJohnny.Controllers
                            where comment.PostId == id
                            select comment;
 
+            ViewBag.IsAdmin = false;
+            if (Request.IsAuthenticated)
+            {
+                ViewBag.UserId = User.Identity.GetUserId();
+                if (User.IsInRole("Admin"))
+                    ViewBag.IsAdmin = true;
+            }
+            else
+                ViewBag.UserId = "";
+
+
             ViewBag.comments = comments;
             ViewBag.PostId = id;
             return View();
@@ -56,6 +67,16 @@ namespace SocialJohnny.Controllers
                            where comment.PostId == id
                            select comment;
 
+            ViewBag.IsAdmin = false;
+            if (Request.IsAuthenticated)
+            {
+                ViewBag.UserId = User.Identity.GetUserId();
+                if (User.IsInRole("Admin"))
+                    ViewBag.IsAdmin = true;
+            }
+            else
+                ViewBag.UserId = "";
+
             ViewBag.comments = comments;
             ViewBag.PostId = id;
             return View("Index",reloadComment);
@@ -66,6 +87,12 @@ namespace SocialJohnny.Controllers
         [Authorize(Roles = "Admin,User")]
         public ActionResult New(Comment comment)
         {
+
+            string currId = User.Identity.GetUserId();
+            Profile currentProfile = db.Profiles.Where(p => p.UserId == currId).ToList().First();
+
+            comment.OwnerNickname = currentProfile.Nickname;
+
             comment.UserId = User.Identity.GetUserId();
             comment.Date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
             try

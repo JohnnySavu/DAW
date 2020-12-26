@@ -72,7 +72,7 @@ namespace SocialJohnny.Controllers
             {
                 return View(model);
             }
-
+            
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -171,12 +171,13 @@ namespace SocialJohnny.Controllers
                     var profile = new Profile();
                     profile.UserId = user.Id;
                     profile.IsPrivate = true;
+                    profile.Nickname = user.Email;
+                    profile.Email = user.Email;
 
                     var friendsProfile = new FriendsProfile();
                     friendsProfile.UserId = user.Id;
                     //friendsProfile.User = user;
 
-                    profile.Email = user.Email;
                     try
                     {
                         if (ModelState.IsValid)
@@ -200,7 +201,29 @@ namespace SocialJohnny.Controllers
                             return RedirectToAction("Index", "Profile");
                         }
 
-                        return RedirectToAction("Index", "Home");
+
+                        if (!ModelState.IsValid)
+                        {
+                            return View(model);
+                        }
+
+                        // This doesn't count login failures towards account lockout
+                        // To enable password failures to trigger account lockout, change to shouldLockout: true
+                        string returnUrl = ""; 
+                        var result2 = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
+                        switch (result2)
+                        {
+                            case SignInStatus.Success:
+                                return RedirectToAction("Index", "Home");
+                            case SignInStatus.LockedOut:
+                                return View("Lockout");
+                            case SignInStatus.RequiresVerification:
+                                return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                            case SignInStatus.Failure:
+                            default:
+                                ModelState.AddModelError("", "Invalid login attempt.");
+                                return View("Login", model);
+                        }
 
                     }
                     catch (Exception e)

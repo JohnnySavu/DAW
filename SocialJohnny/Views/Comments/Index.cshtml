@@ -10,26 +10,30 @@
 <h3>@ViewBag.addMessage</h3>
 <h3>@ViewBag.editMessage</h3>
 <h3>@ViewBag.Allow</h3>
+@if (Request.IsAuthenticated)
+{
+    <form method="post" action="/Comments/New">
 
-<form method="post" action="/Comments/New">
 
+        @Html.Label("Text", "Text Comentariu")
+        @Html.Editor("Text")
+        @Html.ValidationMessageFor(m => m.Text, "Numele este obligatoriu", new { @class = "text-danger " })
 
-    @Html.Label("Text", "Text Comentariu")
-    @Html.Editor("Text")
-    @Html.ValidationMessageFor(m => m.Text, "Numele este obligatoriu", new { @class = "text-danger " })
+        <br />
 
-    <br />
+        <input type="hidden" name="PostId" value="@ViewBag.PostId" />
+        <button type="submit">Adauga</button>
 
-    <input type="hidden" name="PostId" value="@ViewBag.PostId" />
-    <button type="submit">Adauga</button>
-
-</form>
-
+    </form>
+}
 
 @foreach (var comment in ViewBag.comments)
 {
     <h2>@comment.Text</h2>
     <h3>@comment.Date</h3>
+    <h5>@comment.OwnerNickname</h5>
+    if ((Request.IsAuthenticated && ViewBag.UserId == comment.UserId) || ViewBag.IsAdmin == true)
+    {
     <form action="/Comments/Edit/@comment.CommentId">
         <button type="submit">Edit Comment</button>
     </form>
@@ -37,6 +41,6 @@
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button type="submit">Delete Comment</button>
     </form>
-
+    }
     <br />
 }

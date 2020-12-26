@@ -18,6 +18,8 @@ namespace SocialJohnny.Models
         public string Text { get; set; }
         public String Date { get; set; }
 
+        public String OwnerNickname { get; set; }
+
         //Fk
         public int GroupId { get; set; }
         public virtual Group Group { get; set; }
