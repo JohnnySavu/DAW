@@ -285,6 +285,9 @@ namespace SocialJohnny.Controllers
             ViewBag.IsAdmin = false;
             if (Request.IsAuthenticated && User.IsInRole("Admin"))
                 ViewBag.IsAdmin = true;
+            if (Request.IsAuthenticated)
+                ViewBag.IsLogged = true;
+
             string currId = User.Identity.GetUserId();
             var profiles = from p in db.Profiles
                            where p.Nickname.Contains(nickname) &&

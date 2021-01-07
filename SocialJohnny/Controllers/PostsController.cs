@@ -19,8 +19,8 @@ namespace SocialJohnny.Controllers
 
         private void SendEmailNotification(string toEmail, string subject, string content)
         {
-            const string senderEmail = "ioan-daniel.savu@my.fmi.unibuc.ro";
-            const string senderPassword = "parola";
+            const string senderEmail = "socialjohnnywithusu @gmail.com";
+            const string senderPassword = "zy5nX5DkkwEi6cL";
             const string smtpServer = "smtp.gmail.com";
             const int smtpPort = 587;
 

@@ -47,15 +47,17 @@
             </form>
         </div>
     }
+    if (ViewBag.IsLogged == true)
+    {
     <div class="wrapperBut">
         <form method="post" action="/Profiles/FriendRequest/@profile.ProfileId">
             <input type="hidden" name="nickname" value="@ViewBag.nickname" />
             <button type="submit" class="buttonGr">Send Friend Request</button>
         </form>
      </div>
-
-        if (ViewBag.IsAdmin == true)
-        {
+    }
+    if (ViewBag.IsAdmin == true)
+    {
             <div class="wrapperBut">
                 <form method="post" action="/Profiles/DeleteProfile/@profile.ProfileId">
                     @Html.HttpMethodOverride(HttpVerbs.Delete)
