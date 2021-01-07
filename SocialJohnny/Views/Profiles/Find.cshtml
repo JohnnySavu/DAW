@@ -16,6 +16,20 @@
     .wrapperBut {
         text-align: center;
     }
+    .buttonGr {
+        background-color: #3891A6;
+        border: 3px;
+        border-style: solid;
+        border-color: black;
+        color: white;
+        padding: 5px 17px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        margin-top: 3px;
+        margin-left: 10px;
+    }
 </style>
 
 @foreach (var profile in ViewBag.profiles)
@@ -29,14 +43,14 @@
     {
         <div class="wrapperBut">
             <form action="/Profiles/ShowProfile/@profile.ProfileId">
-                <button type="submit">Show Profile</button>
+                <button type="submit" class="buttonGr">Show Profile</button>
             </form>
         </div>
     }
     <div class="wrapperBut">
         <form method="post" action="/Profiles/FriendRequest/@profile.ProfileId">
             <input type="hidden" name="nickname" value="@ViewBag.nickname" />
-            <button type="submit">Send Friend Request</button>
+            <button type="submit" class="buttonGr">Send Friend Request</button>
         </form>
      </div>
 
@@ -45,12 +59,12 @@
             <div class="wrapperBut">
                 <form method="post" action="/Profiles/DeleteProfile/@profile.ProfileId">
                     @Html.HttpMethodOverride(HttpVerbs.Delete)
-                    <button type="submit">Delete User</button>
+                    <button type="submit" class="buttonGr">Delete User</button>
                 </form>
 
                 <form action="/Profiles/EditProfileAdmin/@profile.ProfileId">
 
-                    <button type="submit">Edit User</button>
+                    <button type="submit" class="buttonGr">Edit User</button>
                 </form>
             </div>
         }
