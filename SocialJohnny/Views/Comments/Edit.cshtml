@@ -1,14 +1,64 @@
 ﻿@model SocialJohnny.Models.Comment
 
-<h2>Editare Comment</h2>
+    <style>
+        .wrapperBut {
+            text-align: center;
+        }
 
-<form method="post" action="/Comments/Edit/@Model.CommentId">
-    @Html.HttpMethodOverride(HttpVerbs.Put)
+        .buttonG {
+            background-color: #3891A6;
+            border: 3px;
+            border-style: solid;
+            border-color: black;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 15px;
+            margin-top: 3px;
+            margin-left: 10px;
+        }
 
-    <label>Text coment</label>
-    @Html.Label("Text", "Text comentariu")
-    @Html.Editor("Text")
+        .titlu {
+            font-family: Georgia, serif;
+            font-size: 35px;
+            letter-spacing: 0.8px;
+            word-spacing: 1.4px;
+            color: #000000;
+            font-weight: 700;
+            text-decoration: none solid rgb(68, 68, 68);
+            font-style: italic;
+            font-variant: normal;
+            text-transform: capitalize;
+        }
 
-    <button type=" submit">Modifica comentariu</button>
+        .titluP {
+            font-family: Georgia, serif;
+            font-size: 25px;
+            letter-spacing: 0.8px;
+            word-spacing: 1.4px;
+            color: #000000;
+            font-weight: 700;
+            text-decoration: none solid rgb(68, 68, 68);
+            font-style: normal;
+            font-variant: normal;
+            text-transform: capitalize;
+        }
+    </style>
 
-</form>
+    <div class="wrapperBut">
+
+        <h2 class="titlu">Editare Comment</h2>
+
+        <form method="post" action="/Comments/Edit/@Model.CommentId">
+            @Html.HttpMethodOverride(HttpVerbs.Put)
+
+            
+            @Html.Label("Text", "Text comentariu")
+            @Html.Editor("Text")
+            <br />
+            <button type=" submit" class="buttonG">Modifica comentariu</button>
+
+        </form>
+    </div>

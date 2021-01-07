@@ -3,35 +3,57 @@
     ViewBag.Title = "Find";
 }
 
+<style>
+    .cardO {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+        margin-bottom: 10px;
+    }
+
+    .wrapperBut {
+        text-align: center;
+    }
+</style>
+
 @foreach (var profile in ViewBag.profiles)
 {
-    <h2>@profile.Nickname</h2>
-    <h2>@profile.Email</h2>
-    <br />
-
+    <div class="cardO">
+        <h2>@profile.Nickname</h2>
+        <h2>@profile.Email</h2>
+        <br />
+    </div>
     if (profile.IsPrivate == false)
     {
-    <form action="/Profiles/ShowProfile/@profile.ProfileId">
-        <button type="submit">Show Profile</button>
-    </form>
+        <div class="wrapperBut">
+            <form action="/Profiles/ShowProfile/@profile.ProfileId">
+                <button type="submit">Show Profile</button>
+            </form>
+        </div>
     }
-    <form method = "post" action="/Profiles/FriendRequest/@profile.ProfileId">
-        <input type="hidden" name ="nickname" value="@ViewBag.nickname" />
-        <button type="submit">Send Friend Request</button> 
-    </form>
+    <div class="wrapperBut">
+        <form method="post" action="/Profiles/FriendRequest/@profile.ProfileId">
+            <input type="hidden" name="nickname" value="@ViewBag.nickname" />
+            <button type="submit">Send Friend Request</button>
+        </form>
+     </div>
 
-    if (ViewBag.IsAdmin == true)
-    {
-    <form method="post" action="/Profiles/DeleteProfile/@profile.ProfileId">
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button type="submit">Delete User</button>
-    </form>
-            
-    <form action="/Profiles/EditProfileAdmin/@profile.ProfileId">
-        
-        <button type="submit">Edit User</button>
-    </form>
-    }
+        if (ViewBag.IsAdmin == true)
+        {
+            <div class="wrapperBut">
+                <form method="post" action="/Profiles/DeleteProfile/@profile.ProfileId">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button type="submit">Delete User</button>
+                </form>
 
-    <br />
-}
+                <form action="/Profiles/EditProfileAdmin/@profile.ProfileId">
+
+                    <button type="submit">Edit User</button>
+                </form>
+            </div>
+        }
+
+        <br />
+        }

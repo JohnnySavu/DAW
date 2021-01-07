@@ -6,8 +6,10 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
+    <link rel="stylesheet" href="../Content/manual.css">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -17,9 +19,9 @@
                     <span class="icon-bar"></span>
                 </button>
                 <!--@Html.ActionLink("SocialJohnny", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })-->
-                <form method = "post" action="/Profiles/Find">
+                <form method="post" action="/Profiles/Find">
                     <input type="text" name="nickname" placeholder="Search user here..." />
-                    <button type="submit">Search</button>
+                    <button type="submit" class="searchB" style="margin-top:10px;">Search</button>
                 </form>
             </div>
             <div class="navbar-collapse collapse">
@@ -38,11 +40,13 @@
             </div>
         </div>
     </div>
+    <link rel="stylesheet" href="../Content/manual.css">
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year Johnny & Usu</p>
+            <p style="font-family:Audiowide; font-size:30px;" align="center">&copy; @DateTime.Now.Year Johnny & Usu</p>
         </footer>
     </div>
 

@@ -4,106 +4,135 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Postari</h2>
+<link rel="stylesheet" href="../Content/manual.css">
 
+<div class="wrapperBut">
+    <h2 class="titlu">Postari</h2>
 <h3>@ViewBag.deleteMessage</h3>
 <h3>@ViewBag.addMessage</h3>
 <h3>@ViewBag.editMessage</h3>
 <h3>@ViewBag.Allow</h3>
+</div>
 
-@if (Request.IsAuthenticated)
-{
+<div class="wrapperBut">
+
+    @if (Request.IsAuthenticated)
+    {
+
     <form method="post" action="/Posts/New">
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
 
-        @Html.Label("Text", "Textul postarii")
-        @Html.Editor("Text")
+        @Html.Label("Text", "Textul postarii", new { @class = "input" })
+        <br />
+        @Html.TextArea("Text", new { style = "width: 300px; height: 100px;" })
+        <br /><br />
         @Html.ValidationMessageFor(m => m.Text, "Mesajul este obligatoriu", new { @class = "text-danger " })
         <br />
 
-        @Html.Label("Title", "Titlul postarii")
+        @Html.Label("Title", "Titlul postarii", new { @class = "input" })
+        <br />
         @Html.EditorFor(m => m.Title)
 
         @Html.ValidationMessageFor(m => m.Title, "Titlul este obligatoriu", new { @class = "text-danger " })
 
         <input type="hidden" name="GroupId" value="1" />
-
-        <button type=" submit">Adauga</button>
+        <br />
+        <button type=" submit" style="margin-top:10px; margin-bottom:20px;" class="buttonS">Adauga</button>
 
     </form>
-}
 
-@foreach (var post in ViewBag.Posts)
-{
-    <div class="panel panel-article">
+    }
+
+<style>
+    .titluPA {
+        font-family: Georgia, serif;
+        font-size: 25px;
+        letter-spacing: 0.8px;
+        word-spacing: 1.4px;
+        color: white;
+        font-weight: 700;
+        text-decoration: none solid rgb(68, 68, 68);
+        font-style: normal;
+        font-variant: normal;
+        text-transform: capitalize;
+    }
+</style>
+
+<div class="container">
 
 
-        <div class="panel-heading article-heading">
-            <span class="font-roboto article-title">@post.Title</span>
-        </div>
+    @foreach (var post in ViewBag.Posts)
+    {
+        <div class="panel panel-primary">
 
-        <div class="panel-body">
-            <span class="article-content-title">Continut articol</span>
-            <br />
-            <div class="article-content-wrapper">
-                @Html.Raw(@post.Text)
+
+            <div class="panel-heading article-heading">
+
+                <div class="article-meta">
+                    <span class="">
+                        <i class="glyphicon glyphicon-time"></i>
+                        @post.Date
+                        <i class="glyphicon glyphicon-user" style="margin-left:15px;"></i>
+                        <strong> @post.OwnerNickname</strong>
+                    </span>
+
+            </div>
+
+                <span class="titluPA">@post.Title</span>
+            </div>
+
+            <div class="panel-body">
+                <div class="article-content-wrapper">
+                    @Html.Raw(@post.Text)
+                </div>
+            </div>
+            
+
+            <div class="panel-footer">
+
+
+                @if ((Request.IsAuthenticated && ViewBag.UserId == post.UserId) || ViewBag.IsAdmin == true)
+                {
+                    <form action="/Posts/Edit/@post.PostId">
+                        <button type="submit" style="margin-bottom:5px;" class="btn btn-primary">Edit Post</button>
+                    </form>
+                    <form method="post" action="/Posts/Delete/@post.PostId">
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        <button class="btn btn-primary" type="submit" style="margin-bottom:5px;">Delete Post</button>
+                    </form>
+                }
+                <form action="/Comments/Index/@post.PostId">
+                    <button class="btn btn-primary" type="submit">Show Comments</button>
+                </form>
+                <br />
             </div>
         </div>
-        <div class="article-meta">
-            <span class="">
-                <i class="glyphicon glyphicon-time"></i>
-                @post.Date
-            </span>
-
-            <div>
-                <i class="glyphicon glyphicon-user"></i>
-                <strong> @post.OwnerNickname</strong>
-            </div>
-        </div>
-
-        <div class="panel-footer">
+    }
+</div>
 
 
-            @if ((Request.IsAuthenticated && ViewBag.UserId == post.UserId) || ViewBag.IsAdmin == true)
-            {
-                <form action="/Posts/Edit/@post.PostId">
-                    <button type="submit">Edit Post</button>
-                </form>
-                <form method="post" action="/Posts/Delete/@post.PostId">
-                    @Html.HttpMethodOverride(HttpVerbs.Delete)
-                    <button class="btn btn-sm btn-success full-width" type="submit">Delete Post</button>
-                </form>
-            }
-            <form action="/Comments/Index/@post.PostId">
-                <button class="btn btn-sm btn-success full-width" type="submit">Show Comments</button>
-            </form>
-            <br />
-        </div>
+    <div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li>
+                    <a href="/Posts/Index?page=1" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.lastPage; i++)
+                {
+                    <li><a href="/Posts/Index?page=@i">@(i)</a></li>
+                }
+
+                <li>
+                    <a href="/Posts/Index?page=@(ViewBag.lastPage)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
-}
-
-
-<div>
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li>
-                <a href="/Posts/Index?page=1" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-
-            @for (int i = 1; i <= ViewBag.lastPage; i++)
-            {
-                <li><a href="/Posts/Index?page=@i">@(i)</a></li>
-            }
-
-            <li>
-                <a href="/Posts/Index?page=@(ViewBag.lastPage)" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
 </div>
 

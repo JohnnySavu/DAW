@@ -2,26 +2,45 @@
 @{
     ViewBag.Title = "ShowFriendRequest";
 }
-<h2>Friend Requests</h2>
-<br />
 
-@foreach (var profile in ViewBag.profiles)
-{
-    <h2>@profile.Nickname</h2>
+<link rel="stylesheet" href="../Content/manual.css">
+
+<div class="wrapperBut">
+    <h2 class="titlu">Friend Requests</h2>
     <br />
-    <h2>@profile.FirstName</h2>
-    <br />
-    <h2>@profile.LastName</h2>
-    <br />
-    <form action="/Profiles/AcceptRequest/@profile.ProfileId">
-        <button type="submit">Accept Request</button>
-    </form>
-    <br />
-    <form action="/Profiles/DeleteRequest/@profile.ProfileId">
-        <button type="submit">Delete Request</button>
-    </form>
+
+    <style>
+        .cardO {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+            font-family: arial;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    @foreach (var profile in ViewBag.profiles)
+    {
+        <div class="cardO">
+            <img src="~/Images/poza.jpg" alt="John" style="width:100%">
+            
+            <h2>@profile.Email</h2>
+            <h2>@profile.Nickname</h2>
+            <h2>@profile.FirstName</h2>
+            <h2>@profile.LastName</h2>
+
+            <form action="/Profiles/AcceptRequest/@profile.ProfileId">
+                <button type="submit" class="buttonG">Accept Request</button>
+            </form>
+            <br />
+            <form action="/Profiles/DeleteRequest/@profile.ProfileId">
+                <button type="submit" class="buttonG">Delete Request</button>
+            </form>
 
 
-    <br />
-}
+            <br />
+            </div>
+            }
+        </div>
 

@@ -1,0 +1,189 @@
+﻿.wrapperBut {
+	text-align: center;
+}
+
+.button {
+	background-color: #3891A6; 
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 25px;
+}
+
+.boxInput {
+	rows = "5"; 
+	cols = "5";
+}
+
+.buttonS {
+	background-color: #3891A6; 
+	border: 2px;
+	border-style: solid;
+	border-color: black;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 15px;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.buttonG {
+	background-color: #3891A6; 
+	border: 3px;
+	border-style: solid;
+	border-color: black;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 15px;
+	margin-top: 3px;
+	margin-left: 10px;
+}
+
+.titlu {
+	font-family: Georgia, serif;
+	font-size: 35px;
+	letter-spacing: 0.8px;
+	word-spacing: 1.4px;
+	color: #000000;
+	font-weight: 700;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: italic;
+	font-variant: normal;
+	text-transform: capitalize;
+}
+
+.titluP {
+	font-family: Georgia, serif;
+	font-size: 25px;
+	letter-spacing: 0.8px;
+	word-spacing: 1.4px;
+	color: #000000;
+	font-weight: 700;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: normal;
+	font-variant: normal;
+	text-transform: capitalize;
+}
+
+.titluPA {
+	font-family: Georgia, serif;
+	font-size: 25px;
+	letter-spacing: 0.8px;
+	word-spacing: 1.4px;
+	color: #000000;
+	font-weight: 700;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: normal;
+	font-variant: normal;
+	text-transform: capitalize;
+}
+
+.searchB {
+	font-family: Arial, serif;
+	font-size: 15px;
+	letter-spacing: 0.8px;
+	word-spacing: 1.4px;
+	color: #000000;
+	font-weight: 700;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: italic;
+	font-variant: normal;
+	text-transform: capitalize;
+	margin-right: 10px;
+	margin-top: 12px;
+}
+
+.continut {
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-size: 25px;
+	letter-spacing: -1px;
+	word-spacing: 0px;
+	color: #000000;
+	font-weight: 400;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: italic;
+	font-variant: normal;
+	text-transform: none;
+}
+
+.timp {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	letter-spacing: -1.2px;
+	word-spacing: -0.4px;
+	color: #E215FF;
+	font-weight: 400;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: normal;
+	font-variant: normal;
+	text-transform: none;
+}
+
+
+.input {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 20px;
+	letter-spacing: -0.4px;
+	word-spacing: 0px;
+	color: black;
+	font-weight: 700;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: normal;
+	font-variant: normal;
+	text-transform: none;
+}
+
+.mare {
+	font-family: Georgia, serif;
+	font-size: 45px;
+	letter-spacing: 0.8px;
+	word-spacing: 1.4px;
+	color: #000000;
+	font-weight: 700;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-variant: normal;
+	text-transform: capitalize;
+}
+
+img.resize {
+	max-width: 70%;
+	max-height: 70%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.credit {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 30px;
+	letter-spacing: 0.1em;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke-width: 3px;
+	-webkit-text-stroke-color: white;
+	text-shadow: 8px 8px #ff1f8f, 20px 20px #000000;
+}
+
+.textPostare{
+	max-height:500px;
+}
+
+.cardO {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	max-width: 400px;
+	margin: auto;
+	text-align: center;
+	font-family: arial;
+	margin-bottom: 10px;
+}

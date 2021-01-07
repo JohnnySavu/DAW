@@ -1,10 +1,30 @@
-﻿
-
-@{
+﻿@{
     ViewBag.Title = "Edit";
 }
 
-<h2>Editare Grup</h2>
+    <link rel="stylesheet" href="../Content/manual.css">
+
+<style>
+    .buttonS {
+        background-color: #3891A6; /* Green */
+        border: 2px;
+        border-style: solid;
+        border-color: black;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+</style>
+
+
+<div style="text-align: center;">
+
+<h2 class="titlu">Editare Grup</h2>
 
 <form method="post" action="/Groups/Edit/@ViewBag.group.GroupId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
@@ -17,8 +37,10 @@
         <option value="true">Privat</option>
         <option value="false">Public</option>
     </select>
-
-    <button type=" submit">Modifica grup</button>
+    <br />
+    <button type="submit" style="margin-top:10px;" class="buttonS">Modifica grup</button>
 
 
 </form>
+
+</div>

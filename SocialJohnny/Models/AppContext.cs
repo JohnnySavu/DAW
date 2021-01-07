@@ -9,8 +9,8 @@ namespace SocialJohnny.Models
     public class AppDbContext : DbContext
     {
         public AppDbContext() : base("DBConnectionString") {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppDbContext,
-            SocialJohnny.Migrations.Configuration>("DBConnectionString"));
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppDbContext,
+            //SocialJohnny.Migrations.Configuration>("DBConnectionString"));
         }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }

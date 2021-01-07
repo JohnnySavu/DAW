@@ -3,8 +3,23 @@
     ViewBag.Title = "ShowProfile";
 }
 
-<h2>@Model.FirstName</h2>
-<h2>@Model.LastName</h2>
-<h2>@Model.Nickname</h2>
-<h2>@Model.Email</h2>
-<h2>@Model.Description</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .cardO {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+        margin-bottom: 10px;
+    }
+</style>
+<br /><br />
+<div class="cardO">
+    <img src="~/Images/poza.jpg" alt="John" style="width:100%">
+    <h2>@Model.FirstName</h2>
+    <h2>@Model.LastName</h2>
+    <h2>@Model.Nickname</h2>
+    <h2>@Model.Email</h2>
+    <h2>@Model.Description</h2>
+</div>

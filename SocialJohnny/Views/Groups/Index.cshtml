@@ -5,7 +5,11 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Groups</h2>
+<link rel="stylesheet" href="../Content/manual.css">
+
+<div class="wrapperBut">
+
+<h2 class="titlu">Groups</h2>
 
 <h3>@ViewBag.deleteMessage</h3>
 <h3>@ViewBag.addMessage</h3>
@@ -19,54 +23,83 @@
         @Html.Label("Name", "Nume Grup")
         @Html.Editor("Name")
         @Html.ValidationMessageFor(m => m.Name, "Numele este obligatoriu", new { @class = "text-danger " })
+        <br />
 
         <label>Privat</label>
         <select name="IsPrivate">
             <option value="true">Privat</option>
             <option value="false">Public</option>
         </select>
-
-        <button type=" submit">Adauga</button>
-
+        <br>
+        <button type=" submit" class="buttonS">Adauga</button>
+        <br />
     </form>
 }
 
+<style>
+    .cardO {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+        margin-bottom: 10px;
+    }
+
+    .buttonGr {
+        background-color: #3891A6;
+        border: 3px;
+        border-style: solid;
+        border-color: black;
+        color: white;
+        padding: 5px 17px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        margin-top: 3px;
+        margin-left: 10px;
+    }
+</style>
+    
 @foreach (var group in ViewBag.groups)
 {
     if (group.GroupId != 1)
     {
-        <h1>@group.Name</h1>
+        <div class="cardO">
+            <h1 style="color:black;">@group.Name</h1>
 
-        if (ViewBag.IsAdmin == true || (ViewBag.IsLoged == true && ViewBag.UserId == group.UserId))
-        {
+            @if (ViewBag.IsAdmin == true || (ViewBag.IsLoged == true && ViewBag.UserId == group.UserId))
+            {
             <form action="/Groups/Edit/@group.GroupId">
-                <button type="submit">Edit Group</button>
+                <button type="submit" class="buttonGr">Edit Group</button>
             </form>
             <form method="post" action="/Groups/Delete/@group.GroupId">
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button type="submit">Delete Group</button>
+                <button type="submit" class="buttonGr">Delete Group</button>
             </form>
-        }
-        if (ViewBag.isLoged == true && group.Profiles.Contains(ViewBag.profile) == false)
-        {
+            }
+            @if (ViewBag.isLoged == true && group.Profiles.Contains(ViewBag.profile) == false)
+            {
             <form method="post" action="/Groups/AddToGroup/@group.GroupId">
-                <button type="submit">Join Group</button>
+                <button type="submit" class="buttonGr">Join Group</button>
             </form>
-        }
-        if (ViewBag.isLoged == true && group.Profiles.Contains(ViewBag.profile))
-        {
+            }
+            @if (ViewBag.isLoged == true && group.Profiles.Contains(ViewBag.profile))
+            {
             <form method="post" action="/Groups/AddToGroup/@group.GroupId">
-                <button type="submit">Leave Group</button>
+                <button type="submit" class="buttonGr">Leave Group</button>
             </form>
-        }
+            }
 
-        if (group.IsPrivate == false || (ViewBag.isLoged == true && group.Profiles.Contains(ViewBag.profile) == true))
-        {
+            @if (group.IsPrivate == false || (ViewBag.isLoged == true && group.Profiles.Contains(ViewBag.profile) == true))
+            {
             <form action="/Groups/ViewPosts/@group.GroupId">
-                <button type="submit">View Group's Posts</button>
+                <button type="submit" class="buttonGr">View Group's Posts</button>
             </form>
-        }
-
+            }
+        </div>
     }
     <br />
 }
+</div>

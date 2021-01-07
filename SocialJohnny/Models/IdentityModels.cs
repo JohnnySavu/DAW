@@ -23,8 +23,8 @@ namespace SocialJohnny.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
-            SocialJohnny.Migrations.Configuration>("DefaultConnection"));
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
+            //SocialJohnny.Migrations.Configuration>("DefaultConnection"));
         }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }

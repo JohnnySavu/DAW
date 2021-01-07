@@ -1,17 +1,42 @@
 ﻿
 @{
-    ViewBag.Title = "ShowFriends";
+    ViewBag.Title = "Show Friends";
 }
 
-<h2>ShowFriends</h2>
+<link rel="stylesheet" href="../Content/manual.css">
 
-@foreach (var profile in ViewBag.friends)
-{
-    <h2>@profile.Nickname</h2>
-    <br />
-    <h2>@profile.FirstName</h2>
-    <br />
-    <h2>@profile.LastName</h2>
-    <br />
-    <br />
-}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .cardO {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+        margin-bottom:10px;
+    }
+</style>
+
+
+
+<div class="wrapperBut">
+
+    <h2 class="titlu">My friends</h2>
+
+    @foreach (var profile in ViewBag.friends)
+    {
+        <div class="cardO">
+            <img src="~/Images/poza.jpg" alt="John" style="width:100%">
+            <h2>@profile.Nickname</h2>
+            <h2>@profile.FirstName</h2>
+            <h2>@profile.LastName</h2>
+            <h2>@profile.Email</h2>
+
+        </div>
+        <br /><br />
+
+    }
+
+</div>

@@ -2,33 +2,38 @@
 
 <h1>@ViewBag.NicknameMessage</h1>
 
+<link rel="stylesheet" href="../Content/manual.css">
+
+<div class="wrapperBut">
 <h2>Editare Profil</h2>
 
 <form method="post" action="/Profiles/Edit/@Model.ProfileId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
 
-    @Html.Label("IsPrivate", "Profil Privat")
+    @Html.Label("IsPrivate", "Profil Privat", new { @class = "input" })
     @Html.Editor("IsPrivate")
-    <br />
-    @Html.Label("Nickname", "NickName")
+    <br /><br />        
+    @Html.Label("Nickname", "NickName", new { @class = "input" })<br />
     @Html.Editor("Nickname")
     <br />
-    @Html.Label("FirstName", "Prenume")
+    @Html.Label("FirstName", "Prenume", new { @class = "input" })<br />
     @Html.Editor("FirstName")
     <br />
-    @Html.Label("Lastname", "Nume")
+    @Html.Label("Lastname", "Nume", new { @class = "input" })<br />
     @Html.Editor("LastName")
     <br />
-    @Html.Label("City", "Oras")
+    @Html.Label("City", "Oras", new { @class = "input" })<br />
     @Html.Editor("City")
     <br />
-    @Html.Label("Job", "Loc de munca")
+    @Html.Label("Job", "Loc de munca", new { @class = "input" })<br />
     @Html.Editor("Job")
     <br />
-    @Html.Label("Description", "Descriere")
+    @Html.Label("Description", "Descriere", new { @class = "input" })<br />
     @Html.Editor("Description")
 
-
+    <br />
+    <br />
     <button type=" submit">Modifica profilul</button>
 
 </form>
+</div>
