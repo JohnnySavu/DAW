@@ -19,7 +19,7 @@ namespace SocialJohnny.Controllers
 
         private void SendEmailNotification(string toEmail, string subject, string content)
         {
-            const string senderEmail = "socialjohnnywithusu @gmail.com";
+            const string senderEmail = "socialjohnnywithusu@gmail.com";
             const string senderPassword = "zy5nX5DkkwEi6cL";
             const string smtpServer = "smtp.gmail.com";
             const int smtpPort = 587;
@@ -227,6 +227,7 @@ namespace SocialJohnny.Controllers
                 var posts = from post in db.Posts
                             where post.GroupId == id
                             select post;
+
                 foreach (Post post in posts)
                 {
                     var comments = from comment in db.Comments
@@ -274,6 +275,15 @@ namespace SocialJohnny.Controllers
                 
                 db.Posts.Remove(post);
                 db.SaveChanges();
+
+                if(User.IsInRole("Admin") == true)
+                {
+                    string authorEmail = db.Profiles.Where(p => p.UserId == post.UserId).ToList().First().Email;
+                    string notificationBody = "<p>O postare de a dumneavoastra a fost stearsa de catre administrator</p>";
+
+                    SendEmailNotification(authorEmail, "O postare a fost modificata", notificationBody);
+                }
+
                 TempData["DeletePost"] = "Postarea " + post.Title + " a fost stearsa cu succes";
                 return RedirectToAction("Index");
             }

@@ -288,7 +288,12 @@ namespace SocialJohnny.Controllers
             if (Request.IsAuthenticated)
                 ViewBag.IsLogged = true;
 
-            string currId = User.Identity.GetUserId();
+            string currId;
+            if (Request.IsAuthenticated)
+                currId = User.Identity.GetUserId();
+            else
+                currId = "";
+
             var profiles = from p in db.Profiles
                            where p.Nickname.Contains(nickname) &&
                            p.UserId != currId
